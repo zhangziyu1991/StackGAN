@@ -11,6 +11,9 @@ import torchfile
 from PIL import Image, ImageDraw, ImageFont
 import re
 
+import sys
+sys.path.append('/home/zhang/StackGAN')
+
 from misc.config import cfg, cfg_from_file
 from misc.utils import mkdir_p
 from stageII.model import CondGAN
