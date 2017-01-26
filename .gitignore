@@ -1,3 +1,6 @@
 *.pyc
 ckt_logs
 backup
+.idea
+datasets
+*.m
