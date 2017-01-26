@@ -3,8 +3,12 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import platform
 import sys
-sys.path.append('/home/zhang/StackGAN')
+if platform.system() == 'Darwin':
+    sys.path.append('/Users/zzhang/StackGAN')
+else:
+    sys.path.append('/home/zhang/StackGAN')
 
 # import tensorflow as tf
 import numpy as np
@@ -22,7 +26,10 @@ import pandas as pd
 LR_HR_RETIO = 4
 IMSIZE = 256
 LOAD_SIZE = int(IMSIZE * 76 / 64)
-BIRD_DIR = 'Data/birds'
+if platform.system() == 'Darwin':
+    BIRD_DIR = '/Users/zzhang/StackGAN/Data/birds'
+else:
+    BIRD_DIR = 'Data/birds'
 
 
 def load_filenames(data_dir):
@@ -30,6 +37,7 @@ def load_filenames(data_dir):
     with open(filepath, 'rb') as f:
         filenames = pickle.load(f)
     print('Load filenames from: %s (%d)' % (filepath, len(filenames)))
+    filenames = filenames[0:1]
     return filenames
 
 
@@ -38,12 +46,12 @@ def load_bbox(data_dir):
     df_bounding_boxes = pd.read_csv(bbox_path,
                                     delim_whitespace=True,
                                     header=None).astype(int)
-    #
+
     filepath = os.path.join(data_dir, 'CUB_200_2011/images.txt')
     df_filenames = pd.read_csv(filepath, delim_whitespace=True, header=None)
     filenames = df_filenames[1].tolist()
     print('Total filenames: ', len(filenames), filenames[0])
-    #
+
     filename_bbox = {img_file[:-4]: [] for img_file in filenames}
     numImgs = len(filenames)
     for i in xrange(0, numImgs):
@@ -52,7 +60,7 @@ def load_bbox(data_dir):
 
         key = filenames[i][:-4]
         filename_bbox[key] = bbox
-    #
+
     return filename_bbox
 
 
@@ -72,14 +80,14 @@ def save_data_list(inpath, outpath, filenames, filename_bbox):
         cnt += 1
         if cnt % 100 == 0:
             print('Load %d......' % cnt)
-    #
+
     print('images', len(hr_images), hr_images[0].shape, lr_images[0].shape)
-    #
+
     outfile = outpath + str(LOAD_SIZE) + 'images.pickle'
     with open(outfile, 'wb') as f_out:
         pickle.dump(hr_images, f_out)
         print('save to: ', outfile)
-    #
+
     outfile = outpath + str(lr_size) + 'images.pickle'
     with open(outfile, 'wb') as f_out:
         pickle.dump(lr_images, f_out)
