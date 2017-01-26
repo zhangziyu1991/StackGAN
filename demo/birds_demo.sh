@@ -3,7 +3,7 @@
 #
 CUB_ENCODER=lm_sje_nc4_cub_hybrid_gru18_a1_c512_0.00070_1_10_trainvalids.txt_iter30000.t7 \
 CAPTION_PATH=Data/birds/example_captions \
-GPU=0 \
+GPU=1 \
 
 export CUDA_VISIBLE_DEVICES=${GPU}
 
