@@ -26,10 +26,7 @@ import pandas as pd
 LR_HR_RETIO = 4
 IMSIZE = 256
 LOAD_SIZE = int(IMSIZE * 76 / 64)
-if platform.system() == 'Darwin':
-    BIRD_DIR = '/Users/zzhang/StackGAN/Data/birds'
-else:
-    BIRD_DIR = 'Data/birds'
+BIRD_DIR = 'Data/birds'
 
 
 def load_filenames(data_dir):

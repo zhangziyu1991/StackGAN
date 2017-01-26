@@ -50,6 +50,7 @@ class CondGAN(object):
         log_sigma = conditions[:, self.ef_dim:]
         return [mean, log_sigma]
 
+    # This is where fake images are generated!
     def generator(self, z_var):
         node1_0 =\
             (pt.wrap(z_var).
