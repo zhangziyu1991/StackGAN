@@ -106,8 +106,8 @@ class Dataset(object):
                     e_mean = np.mean(e_sample, axis=0)
                     sampled_embeddings.append(e_mean)
             sampled_embeddings_array = np.array(sampled_embeddings)
-            # return np.squeeze(sampled_embeddings_array), sampled_captions
-            return sampled_embeddings_array, sampled_captions
+            return np.squeeze(sampled_embeddings_array), sampled_captions
+            # return sampled_embeddings_array, sampled_captions
 
     def next_batch(self, batch_size, window):
         """Return the next `batch_size` examples from this data set."""
@@ -223,7 +223,7 @@ class TextDataset(object):
     def get_data(self, pickle_path, aug_flag=True):
         with open(pickle_path + self.image_filename, 'rb') as f:
             images = pickle.load(f)
-            images = iamges[0:2]
+            images = images[0:2]
             images = np.array(images)
             print('images: ', images.shape)
 
