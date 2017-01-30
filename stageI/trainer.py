@@ -382,8 +382,8 @@ class CondGANTrainer(object):
                             fn = saver.save(sess, snapshot_path)
                             print("Model saved in file: %s" % fn)
 
-                    # img_sum = self.epoch_sum_images(sess, cfg.TRAIN.NUM_COPY)
-                    # summary_writer.add_summary(img_sum, counter)
+                    img_sum = self.epoch_sum_images(sess, cfg.TRAIN.NUM_COPY)
+                    summary_writer.add_summary(img_sum, counter)
 
                     avg_log_vals = np.mean(np.array(all_log_vals), axis=0)
                     dic_logs = {}
