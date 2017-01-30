@@ -21,6 +21,7 @@ TRAIN:
 
 TEST:
     BATCH_SIZE: 1
+    NUM_COPY: 1
 
 GAN:
     EMBEDDING_DIM: 128
