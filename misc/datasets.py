@@ -223,23 +223,22 @@ class TextDataset(object):
     def get_data(self, pickle_path, aug_flag=True):
         with open(pickle_path + self.image_filename, 'rb') as f:
             images = pickle.load(f)
-            images = images[0:1]
-            images = np.array(images)
+            images = np.concatenate((images[0:1], images[0:1]), axis=0)
             print('images: ', images.shape)
 
         with open(pickle_path + self.embedding_filename, 'rb') as f:
             embeddings = pickle.load(f)
-            embeddings = embeddings[0:1]
+            embeddings = [embeddings[0], embeddings[0]]
             embeddings = np.array(embeddings)
             self.embedding_shape = [embeddings.shape[-1]]
             print('embeddings: ', embeddings.shape)
         with open(pickle_path + '/filenames.pickle', 'rb') as f:
             list_filenames = pickle.load(f)
-            list_filenames = list_filenames[0:1]
+            list_filenames = [list_filenames[0], list_filenames[0]]
             print('list_filenames: ', len(list_filenames), list_filenames[0])
         with open(pickle_path + '/class_info.pickle', 'rb') as f:
             class_id = pickle.load(f)
-            class_id = class_id[0:1]
+            class_id = [class_id[0], class_id[0]]
 
         return Dataset(images, self.image_shape[0], embeddings,
                        list_filenames, self.workdir, None,
