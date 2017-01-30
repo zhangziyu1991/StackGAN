@@ -19,6 +19,9 @@ TRAIN:
     COEFF:
       KL: 2.0
 
+TEST:
+    BATCH_SIZE: 1
+
 GAN:
     EMBEDDING_DIM: 128
     DF_DIM: 64
