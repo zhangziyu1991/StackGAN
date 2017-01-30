@@ -57,6 +57,8 @@ class CondGANTrainer(object):
             tf.float32, [self.batch_size] + self.dataset.image_shape,
             name='wrong_images'
         )
+
+        # This becomes the sketch entrance
         self.embeddings = tf.placeholder(
             tf.float32, [self.batch_size] + self.dataset.embedding_shape,
             name='conditional_embeddings'
