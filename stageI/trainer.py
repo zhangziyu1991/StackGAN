@@ -310,8 +310,8 @@ class CondGANTrainer(object):
                                        keep_checkpoint_every_n_hours=2)
 
                 # summary_op = tf.merge_all_summaries()
-                # summary_writer = tf.train.SummaryWriter(self.log_dir,
-                #                                         sess.graph)
+                summary_writer = tf.train.SummaryWriter(self.log_dir,
+                                                        sess.graph)
 
                 keys = ["d_loss", "g_loss"]
                 log_vars = []
