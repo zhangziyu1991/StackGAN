@@ -9,6 +9,7 @@ import pprint
 
 import sys
 sys.path.append('/home/zhang/StackGAN')
+sys.path.append('/Users/zzhang/StackGAN')
 
 from misc.datasets import TextDataset
 from stageI.model import CondGAN
