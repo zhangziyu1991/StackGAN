@@ -8,7 +8,7 @@ Z_DIM: 100
 TRAIN:
     FLAG: True
     PRETRAINED_MODEL: ''
-    BATCH_SIZE: 2
+    BATCH_SIZE: 1
     NUM_COPY: 1
     MAX_EPOCH: 600
     SNAPSHOT_INTERVAL: 2000
@@ -20,7 +20,7 @@ TRAIN:
       KL: 2.0
 
 TEST:
-    BATCH_SIZE: 2
+    BATCH_SIZE: 1
     NUM_COPY: 1
 
 GAN:
