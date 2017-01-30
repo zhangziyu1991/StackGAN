@@ -2,7 +2,7 @@ CONFIG_NAME: 'stageI'
 
 DATASET_NAME: 'birds'
 EMBEDDING_TYPE: 'cnn-rnn'
-GPU_ID: -1
+GPU_ID: 0
 Z_DIM: 100
 
 TRAIN:
