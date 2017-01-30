@@ -222,9 +222,13 @@ class CondGANTrainer(object):
             self.visualize_one_superimage(self.fake_images[:n * n],
                                           self.images[:n * n],
                                           n, "train")
+        # fake_sum_test, superimage_test = \
+        #     self.visualize_one_superimage(self.fake_images[n * n:2 * n * n],
+        #                                   self.images[n * n:2 * n * n],
+        #                                   n, "test")
         fake_sum_test, superimage_test = \
-            self.visualize_one_superimage(self.fake_images[n * n:2 * n * n],
-                                          self.images[n * n:2 * n * n],
+            self.visualize_one_superimage(self.fake_images[:n * n],
+                                          self.images[:n * n],
                                           n, "test")
         self.superimages = tf.concat(0, [superimage_train, superimage_test])
         self.image_summary = tf.merge_summary([fake_sum_train, fake_sum_test])
