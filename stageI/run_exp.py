@@ -7,9 +7,12 @@ import datetime
 import argparse
 import pprint
 
+import platform
 import sys
-sys.path.append('/home/zhang/StackGAN')
-sys.path.append('/Users/zzhang/StackGAN')
+if platform.system() == 'Darwin':
+    sys.path.append('/Users/zzhang/StackGAN')
+else:
+    sys.path.append('/home/zhang/StackGAN')
 
 from misc.datasets import TextDataset
 from stageI.model import CondGAN
@@ -44,7 +47,10 @@ if __name__ == "__main__":
     now = datetime.datetime.now(dateutil.tz.tzlocal())
     timestamp = now.strftime('%Y_%m_%d_%H_%M_%S')
 
-    datadir = 'Data/%s' % cfg.DATASET_NAME
+    if platform.system() == 'Darwin':
+        datadir = '/Users/zzhang/StackGAN/Data/%s' % cfg.DATASET_NAME
+    else:
+        datadir = 'Data/%s' % cfg.DATASET_NAME
     dataset = TextDataset(datadir, cfg.EMBEDDING_TYPE, 1)
     filename_test = '%s/test' % (datadir)
     dataset.test = dataset.get_data(filename_test)
