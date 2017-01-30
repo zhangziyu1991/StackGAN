@@ -18,6 +18,7 @@ TRAIN:
     NUM_EMBEDDING: 4
     COEFF:
       KL: 2.0
+    COND_AUGMENTATION: False
 
 TEST:
     BATCH_SIZE: 2
