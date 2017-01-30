@@ -3,12 +3,9 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import platform
 import sys
-if platform.system() == 'Darwin':
-    sys.path.append('/Users/zzhang/StackGAN')
-else:
-    sys.path.append('/home/zhang/StackGAN')
+sys.path.append('/Users/zzhang/StackGAN')
+sys.path.append('/home/zhang/StackGAN')
 
 # import tensorflow as tf
 import numpy as np
@@ -34,7 +31,6 @@ def load_filenames(data_dir):
     with open(filepath, 'rb') as f:
         filenames = pickle.load(f)
     print('Load filenames from: %s (%d)' % (filepath, len(filenames)))
-    filenames = filenames[0:1]
     return filenames
 
 
