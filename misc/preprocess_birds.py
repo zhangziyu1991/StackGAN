@@ -31,7 +31,6 @@ def load_filenames(data_dir):
     with open(filepath, 'rb') as f:
         filenames = pickle.load(f)
     print('Load filenames from: %s (%d)' % (filepath, len(filenames)))
-    filenames = filenames[0:1]
     return filenames
 
 
