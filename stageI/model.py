@@ -40,6 +40,7 @@ class CondGAN(object):
             raise NotImplementedError
 
     # g-net
+    # conditioning augmentation happens here!
     def generate_condition(self, c_var):
         conditions =\
             (pt.wrap(c_var).
