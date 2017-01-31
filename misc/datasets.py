@@ -216,8 +216,8 @@ class TextDataset(object):
         self.test = None
         self.workdir = workdir
         if embedding_type == 'cnn-rnn':
-            self.embedding_filename = '/char-CNN-RNN-embeddings.pickle'
-            # self.embedding_filename = '/sketches.pickle'
+            # self.embedding_filename = '/char-CNN-RNN-embeddings.pickle'
+            self.embedding_filename = '/sketches.pickle'
         elif embedding_type == 'skip-thought':
             self.embedding_filename = '/skip-thought-embeddings.pickle'
 
