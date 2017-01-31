@@ -25,13 +25,10 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Train a GAN network')
     parser.add_argument('--cfg', dest='cfg_file',
                         help='optional config file',
-                        default=None, type=str)
+                        default='stageI/cfg/birds.yml', type=str)
     parser.add_argument('--gpu', dest='gpu_id',
                         help='GPU device id to use [0]',
                         default=-1, type=int)
-    # if len(sys.argv) == 1:
-    #    parser.print_help()
-    #    sys.exit(1)
     args = parser.parse_args()
     return args
 
