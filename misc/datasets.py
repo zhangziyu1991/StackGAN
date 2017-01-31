@@ -225,26 +225,26 @@ class TextDataset(object):
         with open(pickle_path + self.image_filename, 'rb') as f:
             images = pickle.load(f)
             # images = np.concatenate((images[0:1], images[0:1]), axis=0)
-            images = images[0:2] + images[0:2]
+            images = images[0:2] + images[0:2] + images[0:2] + images[0:2]
             images = np.array(images)
             print('images: ', images.shape)
 
         with open(pickle_path + self.embedding_filename, 'rb') as f:
             embeddings = pickle.load(f)
             # embeddings = [embeddings[0], embeddings[0]]
-            embeddings = embeddings[0:2] + embeddings[0:2]
+            embeddings = embeddings[0:2] + embeddings[0:2] + embeddings[0:2] + embeddings[0:2]
             embeddings = np.array(embeddings)
             self.embedding_shape = [embeddings.shape[-1]]
             print('embeddings: ', embeddings.shape)
         with open(pickle_path + '/filenames.pickle', 'rb') as f:
             list_filenames = pickle.load(f)
             # list_filenames = [list_filenames[0], list_filenames[0]]
-            list_filenames = list_filenames[0:2] + list_filenames[0:2]
+            list_filenames = list_filenames[0:2] + list_filenames[0:2] + list_filenames[0:2] + list_filenames[0:2]
             print('list_filenames: ', len(list_filenames), list_filenames[0])
         with open(pickle_path + '/class_info.pickle', 'rb') as f:
             class_id = pickle.load(f)
             # class_id = [class_id[0], class_id[0]]
-            class_id = class_id[0:2] + class_id[0:2]
+            class_id = class_id[0:2] + class_id[0:2] + class_id[0:2] + class_id[0:2]
 
         return Dataset(images, self.image_shape[0], embeddings,
                        list_filenames, self.workdir, None,
