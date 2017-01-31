@@ -266,8 +266,10 @@ class CondGANTrainer(object):
             sess.run([self.superimages, self.image_summary], feed_dict)
 
         # save images generated for train and test captions
-        scipy.misc.imsave('%s/train.jpg' % (self.log_dir), gen_samples[0])
-        scipy.misc.imsave('%s/test.jpg' % (self.log_dir), gen_samples[1])
+        print('Saving %s/train.jpg' % self.log_dir)
+        scipy.misc.imsave('%s/train.jpg' % self.log_dir, gen_samples[0])
+        print('Saving %s/test.jpg' % self.log_dir)
+        scipy.misc.imsave('%s/test.jpg' % self.log_dir, gen_samples[1])
 
         # pfi_train = open(self.log_dir + "/train.txt", "w")
         pfi_test = open(self.log_dir + "/test.txt", "w")
