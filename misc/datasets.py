@@ -225,7 +225,7 @@ class TextDataset(object):
         with open(pickle_path + self.image_filename, 'rb') as f:
             images = pickle.load(f)
             # images = np.concatenate((images[0:1], images[0:1]), axis=0)
-            images = np.tile(images[0:2], [2, 1])
+            images = images[0:2] + images[0:2]
             print('images: ', images.shape)
 
         with open(pickle_path + self.embedding_filename, 'rb') as f:
