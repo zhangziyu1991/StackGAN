@@ -50,10 +50,10 @@ if __name__ == "__main__":
         datadir = 'Data/%s' % cfg.DATASET_NAME
     dataset = TextDataset(datadir, cfg.EMBEDDING_TYPE, 1)
     filename_test = '%s/train' % (datadir)
-    dataset.test = dataset.get_data(filename_test)
+    dataset.test = dataset.get_data(filename_test, aug_flag=False)
     if cfg.TRAIN.FLAG:
         filename_train = '%s/train' % (datadir)
-        dataset.train = dataset.get_data(filename_train)
+        dataset.train = dataset.get_data(filename_train, aug_flag=False)
         # ckt_logs_dir = "ckt_logs/%s/%s_%s" % \
         #     (cfg.DATASET_NAME, cfg.CONFIG_NAME, timestamp)
         ckt_logs_dir = "ckt_logs/%s" % \
