@@ -106,8 +106,8 @@ class Dataset(object):
                     e_mean = np.mean(e_sample, axis=0)
                     sampled_embeddings.append(e_mean)
             sampled_embeddings_array = np.array(sampled_embeddings)
-            # return np.squeeze(sampled_embeddings_array), sampled_captions
-            return sampled_embeddings_array, sampled_captions
+            return np.squeeze(sampled_embeddings_array, axis=1), sampled_captions
+            # return sampled_embeddings_array, sampled_captions
 
     def next_batch(self, batch_size, window):
         """Return the next `batch_size` examples from this data set."""
@@ -128,12 +128,13 @@ class Dataset(object):
         end = self._index_in_epoch
 
         current_ids = self._perm[start:end]
-        fake_ids = np.random.randint(self._num_examples, size=batch_size)
-        collision_flag =\
-            (self._class_id[current_ids] == self._class_id[fake_ids])
-        fake_ids[collision_flag] =\
-            (fake_ids[collision_flag] +
-             np.random.randint(100, 200)) % self._num_examples
+        # fake_ids = np.random.randint(self._num_examples, size=batch_size)
+        # collision_flag =\
+        #     (self._class_id[current_ids] == self._class_id[fake_ids])
+        # fake_ids[collision_flag] =\
+        #     (fake_ids[collision_flag] +
+        #      np.random.randint(100, 200)) % self._num_examples
+        fake_ids = current_ids[::-1]
 
         sampled_images = self._images[current_ids]
         sampled_wrong_images = self._images[fake_ids, :, :, :]
