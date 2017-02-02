@@ -85,14 +85,8 @@ class Dataset(object):
             return images
 
     def sample_embeddings(self, embeddings, filenames, class_id, sample_num):
-        if len(embeddings.shape) == 2 or embeddings.shape[1] == 1:
-            print('')
-            print('')
-            print(embeddings.shape)
-            print(np.squeeze(embeddings, axis=1).shape)
-            print('')
-            print('')
-            return np.squeeze(embeddings, axis=1)
+        if embeddings.shape[1] == 1:    # if only 1 embedding per image
+            return np.squeeze(embeddings, axis=1), None
         else:
             batch_size, embedding_num, _ = embeddings.shape
             # Take every sample_num captions to compute the mean vector
@@ -156,21 +150,11 @@ class Dataset(object):
         if self._embeddings is not None:
             filenames = [self._filenames[i] for i in current_ids]
             class_id = [self._class_id[i] for i in current_ids]
-            print('')
-            print('')
-            print(self._embeddings[current_ids].shape)
-            print('')
-            print('')
-            sampled_embeddings = \
+            sampled_embeddings, sampled_captions = \
                 self.sample_embeddings(self._embeddings[current_ids],
                                        filenames, class_id, window)
-            print('')
-            print('')
-            print(sampled_embeddings.shape)
-            print('')
-            print('')
             ret_list.append(sampled_embeddings)
-            # ret_list.append(sampled_captions)
+            ret_list.append(sampled_captions)
         else:
             ret_list.append(None)
             ret_list.append(None)
@@ -179,6 +163,7 @@ class Dataset(object):
             ret_list.append(self._labels[current_ids])
         else:
             ret_list.append(None)
+            
         return ret_list
 
     def next_batch_test(self, batch_size, start, max_captions):
