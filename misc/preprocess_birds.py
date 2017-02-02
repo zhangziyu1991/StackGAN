@@ -22,7 +22,7 @@ import pandas as pd
 
 LR_HR_RETIO = 4
 IMSIZE = 256
-LOAD_SIZE = int(IMSIZE * 76 / 64)
+LOAD_SIZE = int(IMSIZE * 64 / 64)
 BIRD_DIR = 'Data/birds'
 
 

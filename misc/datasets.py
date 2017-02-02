@@ -205,9 +205,9 @@ class TextDataset(object):
         lr_imsize = 64
         self.hr_lr_ratio = hr_lr_ratio
         if self.hr_lr_ratio == 1:
-            self.image_filename = '/76images.pickle'
+            self.image_filename = '/64images.pickle'
         elif self.hr_lr_ratio == 4:
-            self.image_filename = '/304images.pickle'
+            self.image_filename = '/256images.pickle'
 
         self.image_shape = [lr_imsize * self.hr_lr_ratio,
                             lr_imsize * self.hr_lr_ratio, 3]
