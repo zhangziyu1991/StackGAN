@@ -255,6 +255,8 @@ class CondGANTrainer(object):
         embeddings =\
             np.concatenate([embeddings_train, embeddings_test], axis=0)
 
+        # 2 * n * n images, half train, half test
+        # in case of batch size > 2 * n *n, pad extra test images
         if self.batch_size > 2 * n * n:
             images_pad, _, embeddings_pad, _, _ =\
                 self.dataset.test.next_batch(self.batch_size - 2 * n * n, 1)
@@ -384,7 +386,7 @@ class CondGANTrainer(object):
                             fn = saver.save(sess, snapshot_path)
                             print("Model saved in file: %s" % fn)
 
-                    if (epoch+1) % 500 == 0 or epoch == 0:
+                    if (epoch + 1) % 500 == 0 or epoch == 0:
                         img_sum = self.epoch_sum_images(sess, cfg.TRAIN.NUM_COPY)
                         summary_writer.add_summary(img_sum, counter)
 
