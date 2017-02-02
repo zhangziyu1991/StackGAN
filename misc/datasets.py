@@ -86,7 +86,11 @@ class Dataset(object):
 
     def sample_embeddings(self, embeddings, filenames, class_id, sample_num):
         if embeddings.shape[1] == 1:    # if only 1 embedding per image
-            return np.squeeze(embeddings, axis=1), None
+            # sampled_captions = []
+            # for i in range(embeddings.shape[0]):
+            #     captions = self.readCaptions(filenames[i], class_id[i])
+            #     sampled_captions.append(captions[0])
+            return np.squeeze(embeddings, axis=1), []
         else:
             batch_size, embedding_num, _ = embeddings.shape
             # Take every sample_num captions to compute the mean vector
@@ -163,7 +167,7 @@ class Dataset(object):
             ret_list.append(self._labels[current_ids])
         else:
             ret_list.append(None)
-            
+
         return ret_list
 
     def next_batch_test(self, batch_size, start, max_captions):
