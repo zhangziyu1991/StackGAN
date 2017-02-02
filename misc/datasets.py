@@ -161,7 +161,7 @@ class Dataset(object):
             print(self._embeddings[current_ids].shape)
             print('')
             print('')
-            sampled_embeddings, sampled_captions = \
+            sampled_embeddings = \
                 self.sample_embeddings(self._embeddings[current_ids],
                                        filenames, class_id, window)
             print('')
@@ -170,7 +170,7 @@ class Dataset(object):
             print('')
             print('')
             ret_list.append(sampled_embeddings)
-            ret_list.append(sampled_captions)
+            # ret_list.append(sampled_captions)
         else:
             ret_list.append(None)
             ret_list.append(None)
