@@ -159,6 +159,11 @@ class Dataset(object):
             sampled_embeddings, sampled_captions = \
                 self.sample_embeddings(self._embeddings[current_ids],
                                        filenames, class_id, window)
+            print('')
+            print('')
+            print(sampled_embeddings.shape)
+            print('')
+            print('')
             ret_list.append(sampled_embeddings)
             ret_list.append(sampled_captions)
         else:
