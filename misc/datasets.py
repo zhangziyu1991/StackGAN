@@ -87,7 +87,8 @@ class Dataset(object):
     def sample_embeddings(self, embeddings, filenames, class_id, sample_num):
         if len(embeddings.shape) == 2 or embeddings.shape[1] == 1:
             print(embeddings.shape)
-            return np.squeeze(embeddings)
+            quit()
+            return np.squeeze(embeddings, axis=1)
         else:
             batch_size, embedding_num, _ = embeddings.shape
             # Take every sample_num captions to compute the mean vector
