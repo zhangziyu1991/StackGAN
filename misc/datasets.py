@@ -89,9 +89,9 @@ class Dataset(object):
             print('')
             print('')
             print(embeddings.shape)
-            print('')
-            print('')
             print(np.squeeze(embeddings, axis=1).shape)
+            print('')
+            print('')
             return np.squeeze(embeddings, axis=1)
         else:
             batch_size, embedding_num, _ = embeddings.shape
