@@ -156,6 +156,11 @@ class Dataset(object):
         if self._embeddings is not None:
             filenames = [self._filenames[i] for i in current_ids]
             class_id = [self._class_id[i] for i in current_ids]
+            print('')
+            print('')
+            print(self._embeddings[current_ids].shape)
+            print('')
+            print('')
             sampled_embeddings, sampled_captions = \
                 self.sample_embeddings(self._embeddings[current_ids],
                                        filenames, class_id, window)
