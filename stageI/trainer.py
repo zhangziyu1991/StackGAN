@@ -219,13 +219,13 @@ class CondGANTrainer(object):
 
     def visualization(self, n):
         fake_sum_train, superimage_train = \
-            self.visualize_one_superimage(self.fake_images[: self.batch_size/2],
-                                          self.images[: self.batch_size/2],
+            self.visualize_one_superimage(self.fake_images[: int(self.batch_size/2)],
+                                          self.images[: int(self.batch_size/2)],
                                           n, "train")
             # self.visualize_one_superimage(self.fake_images[:n * n], self.images[:n * n], n, "train")
         fake_sum_test, superimage_test = \
-            self.visualize_one_superimage(self.fake_images[self.batch_size/2: self.batch_size],
-                                          self.images[self.batch_size/2: self.batch_size],
+            self.visualize_one_superimage(self.fake_images[int(self.batch_size/2): int(self.batch_size)],
+                                          self.images[int(self.batch_size/2): int(self.batch_size)],
                                           n, "test")
         # fake_sum_test, superimage_test = \
         #     self.visualize_one_superimage(self.fake_images[:n * n],
