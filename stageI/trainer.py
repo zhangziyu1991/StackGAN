@@ -209,7 +209,7 @@ class CondGANTrainer(object):
         for row in range(rows):
             img = images[row * rows, :, :, :]
             row_img = [img]  # real image
-            for col in range(rows):
+            for col in range(1):
                 row_img.append(img_var[row * rows + col, :, :, :])
             # each rows is 1realimage +10_fakeimage
             stacked_img.append(tf.concat(1, row_img))
@@ -221,12 +221,12 @@ class CondGANTrainer(object):
         fake_sum_train, superimage_train = \
             self.visualize_one_superimage(self.fake_images[: int(self.batch_size/2)],
                                           self.images[: int(self.batch_size/2)],
-                                          n, "train")
+                                          int(self.batch_size / 2), "train")
             # self.visualize_one_superimage(self.fake_images[:n * n], self.images[:n * n], n, "train")
         fake_sum_test, superimage_test = \
             self.visualize_one_superimage(self.fake_images[int(self.batch_size/2): int(self.batch_size)],
                                           self.images[int(self.batch_size/2): int(self.batch_size)],
-                                          n, "test")
+                                          int(self.batch_size / 2), "test")
         # fake_sum_test, superimage_test = \
         #     self.visualize_one_superimage(self.fake_images[:n * n],
         #                                   self.images[:n * n],
