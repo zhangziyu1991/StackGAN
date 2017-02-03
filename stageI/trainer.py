@@ -219,12 +219,13 @@ class CondGANTrainer(object):
 
     def visualization(self, n):
         fake_sum_train, superimage_train = \
-            self.visualize_one_superimage(self.fake_images[:n * n],
-                                          self.images[:n * n],
+            self.visualize_one_superimage(self.fake_images[: self.batch_size/2],
+                                          self.images[: self.batch_size/2],
                                           n, "train")
+            # self.visualize_one_superimage(self.fake_images[:n * n], self.images[:n * n], n, "train")
         fake_sum_test, superimage_test = \
-            self.visualize_one_superimage(self.fake_images[n * n:2 * n * n],
-                                          self.images[n * n:2 * n * n],
+            self.visualize_one_superimage(self.fake_images[self.batch_size/2: self.batch_size],
+                                          self.images[self.batch_size/2: self.batch_size],
                                           n, "test")
         # fake_sum_test, superimage_test = \
         #     self.visualize_one_superimage(self.fake_images[:n * n],
@@ -242,14 +243,14 @@ class CondGANTrainer(object):
 
     def epoch_sum_images(self, sess, n):
         images_train, _, embeddings_train, captions_train, _ =\
-            self.dataset.train.next_batch(n * n, cfg.TRAIN.NUM_EMBEDDING)
-        images_train = self.preprocess(images_train, n)
-        embeddings_train = self.preprocess(embeddings_train, n)
+            self.dataset.train.next_batch(self.batch_size / 2, cfg.TRAIN.NUM_EMBEDDING)
+        # images_train = self.preprocess(images_train, n)
+        # embeddings_train = self.preprocess(embeddings_train, n)
 
         images_test, _, embeddings_test, captions_test, _ = \
-            self.dataset.train.next_batch(n * n, 1)
-        images_test = self.preprocess(images_test, n)
-        embeddings_test = self.preprocess(embeddings_test, n)
+            self.dataset.train.next_batch(self.batch_size / 2, 1)
+        # images_test = self.preprocess(images_test, n)
+        # embeddings_test = self.preprocess(embeddings_test, n)
 
         images = np.concatenate([images_train, images_test], axis=0)
         embeddings =\
