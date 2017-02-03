@@ -10,7 +10,6 @@ import sys
 from six.moves import range
 from progressbar import ETA, Bar, Percentage, ProgressBar
 
-
 from misc.config import cfg
 from misc.utils import mkdir_p
 
@@ -103,7 +102,7 @@ class CondGANTrainer(object):
                 fake_images = self.model.get_generator(tf.concat(1, [c, z]))
 
             # ####get discriminator_loss and generator_loss ###################
-            discriminator_loss, generator_loss =\
+            discriminator_loss, generator_loss = \
                 self.compute_losses(self.images,
                                     self.wrong_images,
                                     fake_images,
@@ -137,20 +136,20 @@ class CondGANTrainer(object):
         wrong_logit = self.model.get_discriminator(wrong_images, embeddings)
         fake_logit = self.model.get_discriminator(fake_images, embeddings)
 
-        real_d_loss =\
+        real_d_loss = \
             tf.nn.sigmoid_cross_entropy_with_logits(real_logit,
                                                     tf.ones_like(real_logit))
         real_d_loss = tf.reduce_mean(real_d_loss)
-        wrong_d_loss =\
+        wrong_d_loss = \
             tf.nn.sigmoid_cross_entropy_with_logits(wrong_logit,
                                                     tf.zeros_like(wrong_logit))
         wrong_d_loss = tf.reduce_mean(wrong_d_loss)
-        fake_d_loss =\
+        fake_d_loss = \
             tf.nn.sigmoid_cross_entropy_with_logits(fake_logit,
                                                     tf.zeros_like(fake_logit))
         fake_d_loss = tf.reduce_mean(fake_d_loss)
         if cfg.TRAIN.B_WRONG:
-            discriminator_loss =\
+            discriminator_loss = \
                 real_d_loss + (wrong_d_loss + fake_d_loss) / 2.
             self.log_vars.append(("d_loss_wrong", wrong_d_loss))
         else:
@@ -176,13 +175,13 @@ class CondGANTrainer(object):
 
         generator_opt = tf.train.AdamOptimizer(self.generator_lr,
                                                beta1=0.5)
-        self.generator_trainer =\
+        self.generator_trainer = \
             pt.apply_optimizer(generator_opt,
                                losses=[generator_loss],
                                var_list=g_vars)
         discriminator_opt = tf.train.AdamOptimizer(self.discriminator_lr,
                                                    beta1=0.5)
-        self.discriminator_trainer =\
+        self.discriminator_trainer = \
             pt.apply_optimizer(discriminator_opt,
                                losses=[discriminator_loss],
                                var_list=d_vars)
@@ -219,13 +218,13 @@ class CondGANTrainer(object):
 
     def visualization(self, n):
         fake_sum_train, superimage_train = \
-            self.visualize_one_superimage(self.fake_images[: int(self.batch_size/2)],
-                                          self.images[: int(self.batch_size/2)],
+            self.visualize_one_superimage(self.fake_images[: int(self.batch_size / 2)],
+                                          self.images[: int(self.batch_size / 2)],
                                           int(self.batch_size / 2), "train")
-            # self.visualize_one_superimage(self.fake_images[:n * n], self.images[:n * n], n, "train")
+        # self.visualize_one_superimage(self.fake_images[:n * n], self.images[:n * n], n, "train")
         fake_sum_test, superimage_test = \
-            self.visualize_one_superimage(self.fake_images[int(self.batch_size/2): int(self.batch_size)],
-                                          self.images[int(self.batch_size/2): int(self.batch_size)],
+            self.visualize_one_superimage(self.fake_images[int(self.batch_size / 2): int(self.batch_size)],
+                                          self.images[int(self.batch_size / 2): int(self.batch_size)],
                                           int(self.batch_size / 2), "test")
         # fake_sum_test, superimage_test = \
         #     self.visualize_one_superimage(self.fake_images[:n * n],
@@ -242,7 +241,7 @@ class CondGANTrainer(object):
         return x
 
     def epoch_sum_images(self, sess, n):
-        images_train, _, embeddings_train, captions_train, _ =\
+        images_train, _, embeddings_train, captions_train, _ = \
             self.dataset.train.next_batch(self.batch_size / 2, cfg.TRAIN.NUM_EMBEDDING)
         # images_train = self.preprocess(images_train, n)
         # embeddings_train = self.preprocess(embeddings_train, n)
@@ -253,7 +252,7 @@ class CondGANTrainer(object):
         # embeddings_test = self.preprocess(embeddings_test, n)
 
         images = np.concatenate([images_train, images_test], axis=0)
-        embeddings =\
+        embeddings = \
             np.concatenate([embeddings_train, embeddings_test], axis=0)
 
         # 2 * n * n images, half train, half test
@@ -265,7 +264,7 @@ class CondGANTrainer(object):
         #     embeddings = np.concatenate([embeddings, embeddings_pad], axis=0)
         feed_dict = {self.images: images,
                      self.embeddings: embeddings}
-        gen_samples, img_summary =\
+        gen_samples, img_summary = \
             sess.run([self.superimages, self.image_summary], feed_dict)
 
         # save images generated for train and test captions
@@ -351,16 +350,17 @@ class CondGANTrainer(object):
                     all_log_vals = []
                     for i in range(updates_per_epoch):
                         pbar.update(i)
+
                         # training d
-                        images, wrong_images, embeddings, _, _ =\
+                        images, wrong_images, embeddings, _, _ = \
                             self.dataset.train.next_batch(self.batch_size,
                                                           num_embedding)
                         feed_dict = {self.images: images,
                                      self.wrong_images: wrong_images,
                                      self.embeddings: embeddings,
                                      self.generator_lr: generator_lr,
-                                     self.discriminator_lr: discriminator_lr
-                                     }
+                                     self.discriminator_lr: discriminator_lr}
+
                         # train d
                         feed_out = [self.discriminator_trainer,
                                     self.d_sum,
@@ -371,19 +371,21 @@ class CondGANTrainer(object):
                         summary_writer.add_summary(d_sum, counter)
                         summary_writer.add_summary(hist_sum, counter)
                         all_log_vals.append(log_vals)
+
                         # train g
                         feed_out = [self.generator_trainer,
                                     self.g_sum]
                         _, g_sum = sess.run(feed_out,
                                             feed_dict)
                         summary_writer.add_summary(g_sum, counter)
+
                         # save checkpoint
                         counter += 1
                         if counter % self.snapshot_interval == 0:
-                            snapshot_path = "%s/%s_%s.ckpt" %\
-                                             (self.checkpoint_dir,
-                                              self.exp_name,
-                                              str(counter))
+                            snapshot_path = "%s/%s_%s.ckpt" % \
+                                            (self.checkpoint_dir,
+                                             self.exp_name,
+                                             str(counter))
                             fn = saver.save(sess, snapshot_path)
                             print("Model saved in file: %s" % fn)
 
@@ -410,8 +412,8 @@ class CondGANTrainer(object):
         # batch_size samples for each embedding
         numSamples = len(sample_batchs)
         for j in range(len(filenames)):
-            s_tmp = '%s-1real-%dsamples/%s/%s' %\
-                (save_dir, numSamples, subset, filenames[j])
+            s_tmp = '%s-1real-%dsamples/%s/%s' % \
+                    (save_dir, numSamples, subset, filenames[j])
             folder = s_tmp[:s_tmp.rfind('/')]
             if not os.path.isdir(folder):
                 print('Make a new folder: ', folder)
@@ -430,7 +432,7 @@ class CondGANTrainer(object):
         print('num_examples:', dataset._num_examples)
         while count < dataset._num_examples:
             start = count % dataset._num_examples
-            images, embeddings_batchs, filenames, _ =\
+            images, embeddings_batchs, filenames, _ = \
                 dataset.next_batch_test(self.batch_size, start, 1)
             print('count = ', count, 'start = ', start)
             for i in range(len(embeddings_batchs)):
