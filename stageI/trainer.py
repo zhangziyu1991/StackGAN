@@ -247,7 +247,7 @@ class CondGANTrainer(object):
         # embeddings_train = self.preprocess(embeddings_train, n)
 
         images_test, _, embeddings_test, captions_test, _ = \
-            self.dataset.train.next_batch(self.batch_size / 2, 1)
+            self.dataset.test.next_batch(self.batch_size / 2, 1)
         # images_test = self.preprocess(images_test, n)
         # embeddings_test = self.preprocess(embeddings_test, n)
 

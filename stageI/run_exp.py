@@ -49,7 +49,7 @@ if __name__ == "__main__":
     else:
         datadir = 'Data/%s' % cfg.DATASET_NAME
     dataset = TextDataset(datadir, cfg.EMBEDDING_TYPE, 1)
-    filename_test = '%s/train' % (datadir)
+    filename_test = '%s/test' % (datadir)
     dataset.test = dataset.get_data(filename_test, aug_flag=False)
     if cfg.TRAIN.FLAG:
         filename_train = '%s/train' % (datadir)
