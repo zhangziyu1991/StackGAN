@@ -211,7 +211,7 @@ class CondGANTrainer(object):
             row_img = [img]  # real image
             for col in range(1):
                 row_img.append(img_var[row * rows + col, :, :, :])
-            # each rows is 1realimage +10_fakeimage
+            # each row has 1 real image +10 fake images
             stacked_img.append(tf.concat(1, row_img))
         imgs = tf.expand_dims(tf.concat(0, stacked_img), 0)
         current_img_summary = tf.image_summary(filename, imgs)
