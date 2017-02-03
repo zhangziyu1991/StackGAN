@@ -207,7 +207,7 @@ class CondGANTrainer(object):
     def visualize_one_superimage(self, img_var, images, rows, filename):
         stacked_img = []
         for row in range(rows):
-            img = images[row * rows, :, :, :]
+            img = images[row, :, :, :]
             row_img = [img]  # real image
             for col in range(1):
                 row_img.append(img_var[row * rows + col, :, :, :])
