@@ -258,11 +258,11 @@ class CondGANTrainer(object):
 
         # 2 * n * n images, half train, half test
         # in case of batch size > 2 * n *n, pad extra test images
-        if self.batch_size > 2 * n * n:
-            images_pad, _, embeddings_pad, _, _ =\
-                self.dataset.test.next_batch(self.batch_size - 2 * n * n, 1)
-            images = np.concatenate([images, images_pad], axis=0)
-            embeddings = np.concatenate([embeddings, embeddings_pad], axis=0)
+        # if self.batch_size > 2 * n * n:
+        #     images_pad, _, embeddings_pad, _, _ =\
+        #         self.dataset.test.next_batch(self.batch_size - 2 * n * n, 1)
+        #     images = np.concatenate([images, images_pad], axis=0)
+        #     embeddings = np.concatenate([embeddings, embeddings_pad], axis=0)
         feed_dict = {self.images: images,
                      self.embeddings: embeddings}
         gen_samples, img_summary =\
