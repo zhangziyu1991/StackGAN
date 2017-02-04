@@ -77,13 +77,13 @@ class Dataset(object):
                 w1 = np.floor((ori_size - self._imsize) * np.random.random())
                 cropped_image = images[i][w1: w1 + self._imsize, h1: h1 + self._imsize, :]
                 if sketches is not None:
-                    cropped_sketches = sketches[i][w1: w1 + self._imsize, h1: h1 + self._imsize].flatten()
+                    cropped_sketches = sketches[i][w1: w1 + self._imsize, h1: h1 + self._imsize]
                 if random.random() > 0.5:
                     transformed_images[i] = np.fliplr(cropped_image)
-                    transformed_sketches[i] = np.fliplr(cropped_sketches)
+                    transformed_sketches[i] = np.fliplr(cropped_sketches).flatten()
                 else:
                     transformed_images[i] = cropped_image
-                    transformed_sketches[i] = cropped_sketches
+                    transformed_sketches[i] = cropped_sketches.flatten()
             return transformed_images, transformed_sketches
 
         return images, sketches
