@@ -245,7 +245,7 @@ class TextDataset(object):
             # embeddings = embeddings[0:20]
             # embeddings = embeddings[0:2] + embeddings[0:2] + embeddings[0:2] + embeddings[0:2]
             embeddings = np.array(embeddings)
-            self.embedding_shape = [self.image_filename[0] * self.image_shape[0]]
+            self.embedding_shape = [self.image_shape[0] * self.image_shape[0]]
             print('embeddings: ', embeddings.shape)
         with open(pickle_path + '/filenames.pickle', 'rb') as f:
             list_filenames = pickle.load(f)
