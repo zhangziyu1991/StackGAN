@@ -7,7 +7,7 @@ import pandas as pd
 BIRD_DIR = 'Data/birds'
 
 def load_filenames(data_dir):
-    filepath = data_dir + 'filenames.pickle'
+    filepath = data_dir + '/filenames.pickle'
     with open(filepath, 'rb') as f:
         filenames = pickle.load(f)
     print('Load filenames from: %s (%d)' % (filepath, len(filenames)))
@@ -63,7 +63,7 @@ def convert_birds_dataset_pickle(inpath, set):
 
     sketches = list()
 
-    train_dir = os.path.join(inpath, set, '/')
+    train_dir = os.path.join(inpath, set)
     train_filenames = load_filenames(train_dir)
     for i in range(len(train_filenames)):
         fn = train_filenames[i]
