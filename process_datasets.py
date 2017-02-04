@@ -63,7 +63,7 @@ def convert_birds_dataset_pickle(inpath):
 
     sketches = list()
 
-    train_dir = os.path.join(inpath, 'test/')
+    train_dir = os.path.join(inpath, 'train/')
     train_filenames = load_filenames(train_dir)
     for i in range(len(train_filenames)):
         fn = train_filenames[i]
@@ -77,8 +77,8 @@ def convert_birds_dataset_pickle(inpath):
 
         sketches.append(sketch)
 
-    pickle.dump(sketches, open('Data/birds/test/sketches.pickle', 'wb'))
-    pass
+    print('Saving to %s'.format('Data/birds/train/sketches.pickle'))
+    pickle.dump(sketches, open('Data/birds/train/sketches.pickle', 'wb'))
 
 
 if __name__ == '__main__':
