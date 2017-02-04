@@ -242,7 +242,7 @@ class CondGANTrainer(object):
                 x[i * n + j] = x[i * n]
         return x
 
-    def epoch_sum_images(self, sess, n):
+    def epoch_sum_images(self, sess, n, epoch):
         images_train, _, embeddings_train, captions_train, _ = \
             self.dataset.train.next_batch(10, cfg.TRAIN.NUM_EMBEDDING)
         # images_train = self.preprocess(images_train, n)
@@ -268,9 +268,9 @@ class CondGANTrainer(object):
 
         # save images generated for train and test captions
         print('Saving %s/train.jpg' % self.log_dir)
-        scipy.misc.imsave('%s/train.jpg' % self.log_dir, gen_samples[0])
+        scipy.misc.imsave('{}/train_epoch{}.jpg'.format(self.log_dir, epoch), gen_samples[0])
         print('Saving %s/test.jpg' % self.log_dir)
-        scipy.misc.imsave('%s/test.jpg' % self.log_dir, gen_samples[1])
+        scipy.misc.imsave('{}/test_epoch{}.jpg'.format(self.log_dir, epoch), gen_samples[1])
 
         # pfi_train = open(self.log_dir + "/train.txt", "w")
         pfi_test = open(self.log_dir + "/test.txt", "w")
@@ -388,9 +388,9 @@ class CondGANTrainer(object):
                             fn = saver.save(sess, snapshot_path)
                             print("Model saved in file: %s" % fn)
 
-                    if (epoch + 1) % 500 == 0 or epoch == 0:
-                        img_sum = self.epoch_sum_images(sess, cfg.TRAIN.NUM_COPY)
-                        summary_writer.add_summary(img_sum, counter)
+
+                    img_sum = self.epoch_sum_images(sess, cfg.TRAIN.NUM_COPY, epoch+1)
+                    summary_writer.add_summary(img_sum, counter)
 
                     avg_log_vals = np.mean(np.array(all_log_vals), axis=0)
                     dic_logs = {}
