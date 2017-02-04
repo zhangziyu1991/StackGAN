@@ -163,7 +163,7 @@ class Dataset(object):
         sampled_images, sampled_embeddings = self.transform(sampled_images, sampled_embeddings)
         sampled_wrong_images, _ = self.transform(sampled_wrong_images)
 
-        ret_list = list(sampled_images)
+        ret_list = list([sampled_images])
         ret_list.append(sampled_wrong_images)
         ret_list.append(sampled_embeddings)
         ret_list.append(sampled_captions)
