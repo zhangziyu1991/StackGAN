@@ -58,12 +58,12 @@ def custom_crop(img, bbox):
     return img_cropped
 
 
-def convert_birds_dataset_pickle(inpath):
+def convert_birds_dataset_pickle(inpath, set):
     filename_bbox = load_bbox(inpath)
 
     sketches = list()
 
-    train_dir = os.path.join(inpath, 'train/')
+    train_dir = os.path.join(inpath, set, '/')
     train_filenames = load_filenames(train_dir)
     for i in range(len(train_filenames)):
         fn = train_filenames[i]
@@ -72,14 +72,15 @@ def convert_birds_dataset_pickle(inpath):
         mat = scipy.io.loadmat('sketches/{}.mat'.format(fn))
         sketch = mat['sketch']
         sketch = custom_crop(sketch, bbox)
-        sketch = np.expand_dims(scipy.misc.imresize(sketch, [64, 64], 'bicubic').flatten().astype('float32'), axis=0)
+        sketch = scipy.misc.imresize(sketch, [76, 76], 'bicubic').astype('float32')
         sketch -= 0.5
 
         sketches.append(sketch)
 
-    print('Saving to %s'.format('Data/birds/train/sketches.pickle'))
-    pickle.dump(sketches, open('Data/birds/train/sketches.pickle', 'wb'))
+    print('Saving to %s'.format('Data/birds/%s/sketches.pickle'.format(set)))
+    pickle.dump(sketches, open('Data/birds/%s/sketches.pickle'.format(set), 'wb'))
 
 
 if __name__ == '__main__':
-    convert_birds_dataset_pickle(BIRD_DIR)
+    convert_birds_dataset_pickle(BIRD_DIR, 'train')
+    convert_birds_dataset_pickle(BIRD_DIR, 'test')
