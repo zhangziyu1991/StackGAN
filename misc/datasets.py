@@ -1,7 +1,6 @@
 from __future__ import division
 from __future__ import print_function
 
-
 import numpy as np
 import pickle
 import random
@@ -59,33 +58,38 @@ class Dataset(object):
         if name.find('jpg/') != -1:  # flowers dataset
             class_name = 'class_%05d/' % class_id
             name = name.replace('jpg/', class_name)
-        cap_path = '%s/text_c10/%s.txt' %\
+        cap_path = '%s/text_c10/%s.txt' % \
                    (self.workdir, name)
         with open(cap_path, "r") as f:
             captions = f.read().split('\n')
         captions = [cap for cap in captions if len(cap) > 0]
         return captions
 
-    def transform(self, images):
+    def transform(self, images, sketches=None):
         if self._aug_flag:
-            transformed_images =\
-                np.zeros([images.shape[0], self._imsize, self._imsize, 3])
+            transformed_images = np.zeros([images.shape[0], self._imsize, self._imsize, 3])
+            transformed_sketches = None
+            if sketches:
+                transformed_sketches = np.zeros([sketches.shape[0], self._imsize, self._imsize])
             ori_size = images.shape[1]
             for i in range(images.shape[0]):
                 h1 = np.floor((ori_size - self._imsize) * np.random.random())
                 w1 = np.floor((ori_size - self._imsize) * np.random.random())
-                cropped_image =\
-                    images[i][w1: w1 + self._imsize, h1: h1 + self._imsize, :]
+                cropped_image = images[i][w1: w1 + self._imsize, h1: h1 + self._imsize, :]
+                if sketches:
+                    cropped_sketches = sketches[i][w1: w1 + self._imsize, h1: h1 + self._imsize].flatten()
                 if random.random() > 0.5:
                     transformed_images[i] = np.fliplr(cropped_image)
+                    transformed_sketches[i] = np.fliplr(cropped_sketches)
                 else:
                     transformed_images[i] = cropped_image
-            return transformed_images
-        else:
-            return images
+                    transformed_sketches[i] = cropped_sketches
+            return transformed_images, transformed_sketches
+
+        return images, sketches
 
     def sample_embeddings(self, embeddings, filenames, class_id, sample_num):
-        if embeddings.shape[1] == 1:    # if only 1 embedding per image
+        if embeddings.shape[1] == 1:  # if only 1 embedding per image
             return np.squeeze(embeddings, axis=1), ['no caption'] * embeddings.shape[0]
         else:
             batch_size, embedding_num, _ = embeddings.shape
@@ -128,13 +132,13 @@ class Dataset(object):
         end = self._index_in_epoch
 
         current_ids = self._perm[start:end]
-        # fake_ids = np.random.randint(self._num_examples, size=batch_size)
-        # collision_flag =\
-        #     (self._class_id[current_ids] == self._class_id[fake_ids])
-        # fake_ids[collision_flag] =\
-        #     (fake_ids[collision_flag] +
-        #      np.random.randint(100, 200)) % self._num_examples
-        fake_ids = current_ids[::-1]
+        fake_ids = np.random.randint(self._num_examples, size=batch_size)
+        collision_flag = \
+            (self._class_id[current_ids] == self._class_id[fake_ids])
+        fake_ids[collision_flag] = \
+            (fake_ids[collision_flag] +
+             np.random.randint(100, 200)) % self._num_examples
+        # fake_ids = current_ids[::-1]
 
         sampled_images = self._images[current_ids]
         sampled_wrong_images = self._images[fake_ids, :, :, :]
@@ -143,21 +147,24 @@ class Dataset(object):
         sampled_images = sampled_images * (2. / 255) - 1.
         sampled_wrong_images = sampled_wrong_images * (2. / 255) - 1.
 
-        sampled_images = self.transform(sampled_images)
-        sampled_wrong_images = self.transform(sampled_wrong_images)
-        ret_list = [sampled_images, sampled_wrong_images]
+        # sampled_embeddings, sampled_captions = None, None
+        # if self._embeddings is not None:
+        #     filenames = [self._filenames[i] for i in current_ids]
+        #     class_id = [self._class_id[i] for i in current_ids]
+        #     sampled_embeddings, sampled_captions = \
+        #         self.sample_embeddings(self._embeddings[current_ids],
+        #                                filenames, class_id, window)
 
-        if self._embeddings is not None:
-            filenames = [self._filenames[i] for i in current_ids]
-            class_id = [self._class_id[i] for i in current_ids]
-            sampled_embeddings, sampled_captions = \
-                self.sample_embeddings(self._embeddings[current_ids],
-                                       filenames, class_id, window)
-            ret_list.append(sampled_embeddings)
-            ret_list.append(sampled_captions)
-        else:
-            ret_list.append(None)
-            ret_list.append(None)
+        sampled_embeddings = self._embeddings[current_ids]
+        sampled_captions = ['no caption'] * sampled_embeddings.shape[0]
+
+        sampled_images, sampled_embeddings = self.transform(sampled_images, sampled_embeddings)
+        sampled_wrong_images, _ = self.transform(sampled_wrong_images)
+
+        ret_list = list(sampled_images)
+        ret_list.append(sampled_wrong_images)
+        ret_list.append(sampled_embeddings)
+        ret_list.append(sampled_captions)
 
         if self._labels is not None:
             ret_list.append(self._labels[current_ids])
@@ -226,26 +233,26 @@ class TextDataset(object):
     def get_data(self, pickle_path, aug_flag=True):
         with open(pickle_path + self.image_filename, 'rb') as f:
             images = pickle.load(f)
-            images = images[0:20]
+            # images = images[0:20]
             # images = images[0:2] + images[0:2] + images[0:2] + images[0:2]
             images = np.array(images)
             print('images: ', images.shape)
 
         with open(pickle_path + self.embedding_filename, 'rb') as f:
             embeddings = pickle.load(f)
-            embeddings = embeddings[0:20]
+            # embeddings = embeddings[0:20]
             # embeddings = embeddings[0:2] + embeddings[0:2] + embeddings[0:2] + embeddings[0:2]
             embeddings = np.array(embeddings)
             self.embedding_shape = [embeddings.shape[-1]]
             print('embeddings: ', embeddings.shape)
         with open(pickle_path + '/filenames.pickle', 'rb') as f:
             list_filenames = pickle.load(f)
-            list_filenames = list_filenames[0:20]
+            # list_filenames = list_filenames[0:20]
             # list_filenames = list_filenames[0:2] + list_filenames[0:2] + list_filenames[0:2] + list_filenames[0:2]
             print('list_filenames: ', len(list_filenames), list_filenames[0])
         with open(pickle_path + '/class_info.pickle', 'rb') as f:
             class_id = pickle.load(f)
-            class_id = class_id[0:20]
+            # class_id = class_id[0:20]
             # class_id = class_id[0:2] + class_id[0:2] + class_id[0:2] + class_id[0:2]
 
         return Dataset(images, self.image_shape[0], embeddings,

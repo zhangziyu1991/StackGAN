@@ -37,16 +37,8 @@ def load_bbox(data_dir):
     return filename_bbox
 
 def custom_crop(img, bbox):
-    # bbox = [x-left, y-top, width, height]
+    # bbox consists of (x-left, y-top, width, height)
     imsiz = img.shape  # [height, width, channel]
-    # if box[0] + box[2] >= imsiz[1] or\
-    #     box[1] + box[3] >= imsiz[0] or\
-    #     box[0] <= 0 or\
-    #     box[1] <= 0:
-    #     box[0] = np.maximum(0, box[0])
-    #     box[1] = np.maximum(0, box[1])
-    #     box[2] = np.minimum(imsiz[1] - box[0] - 1, box[2])
-    #     box[3] = np.minimum(imsiz[0] - box[1] - 1, box[3])
     center_x = int((2 * bbox[0] + bbox[2]) / 2)
     center_y = int((2 * bbox[1] + bbox[3]) / 2)
     R = int(np.maximum(bbox[2], bbox[3]) * 0.75)

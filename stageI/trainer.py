@@ -210,7 +210,7 @@ class CondGANTrainer(object):
             row_img = [img]  # real image
             # for col in range(1):
             row_img.append(img_var[row, :, :, :])
-            # each row has 1 real image +10 fake images
+            # each row has 1 real image + 1 fake images
             stacked_img.append(tf.concat(1, row_img))
         imgs = tf.expand_dims(tf.concat(0, stacked_img), 0)
         current_img_summary = tf.image_summary(filename, imgs)
@@ -218,14 +218,16 @@ class CondGANTrainer(object):
 
     def visualization(self, n):
         fake_sum_train, superimage_train = \
-            self.visualize_one_superimage(self.fake_images[: int(self.batch_size / 2)],
-                                          self.images[: int(self.batch_size / 2)],
-                                          int(self.batch_size / 2), "train")
+            self.visualize_one_superimage(self.fake_images[: 10],
+                                          self.images[: 10],
+                                          10,
+                                          "train")
         # self.visualize_one_superimage(self.fake_images[:n * n], self.images[:n * n], n, "train")
         fake_sum_test, superimage_test = \
-            self.visualize_one_superimage(self.fake_images[int(self.batch_size / 2): int(self.batch_size)],
-                                          self.images[int(self.batch_size / 2): int(self.batch_size)],
-                                          int(self.batch_size / 2), "test")
+            self.visualize_one_superimage(self.fake_images[10: 20],
+                                          self.images[10: 20],
+                                          10,
+                                          "test")
         # fake_sum_test, superimage_test = \
         #     self.visualize_one_superimage(self.fake_images[:n * n],
         #                                   self.images[:n * n],
@@ -242,30 +244,27 @@ class CondGANTrainer(object):
 
     def epoch_sum_images(self, sess, n):
         images_train, _, embeddings_train, captions_train, _ = \
-            self.dataset.train.next_batch(self.batch_size / 2, cfg.TRAIN.NUM_EMBEDDING)
+            self.dataset.train.next_batch(10, cfg.TRAIN.NUM_EMBEDDING)
         # images_train = self.preprocess(images_train, n)
         # embeddings_train = self.preprocess(embeddings_train, n)
 
         images_test, _, embeddings_test, captions_test, _ = \
-            self.dataset.test.next_batch(self.batch_size / 2, 1)
+            self.dataset.test.next_batch(10, 1)
         # images_test = self.preprocess(images_test, n)
         # embeddings_test = self.preprocess(embeddings_test, n)
 
         images = np.concatenate([images_train, images_test], axis=0)
-        embeddings = \
-            np.concatenate([embeddings_train, embeddings_test], axis=0)
+        embeddings = np.concatenate([embeddings_train, embeddings_test], axis=0)
 
         # 2 * n * n images, half train, half test
         # in case of batch size > 2 * n *n, pad extra test images
         # if self.batch_size > 2 * n * n:
-        #     images_pad, _, embeddings_pad, _, _ =\
-        #         self.dataset.test.next_batch(self.batch_size - 2 * n * n, 1)
-        #     images = np.concatenate([images, images_pad], axis=0)
-        #     embeddings = np.concatenate([embeddings, embeddings_pad], axis=0)
-        feed_dict = {self.images: images,
-                     self.embeddings: embeddings}
-        gen_samples, img_summary = \
-            sess.run([self.superimages, self.image_summary], feed_dict)
+        images_pad, _, embeddings_pad, _, _ = self.dataset.test.next_batch(self.batch_size - 20, 1)
+        images = np.concatenate([images, images_pad], axis=0)
+        embeddings = np.concatenate([embeddings, embeddings_pad], axis=0)
+
+        feed_dict = {self.images: images, self.embeddings: embeddings}
+        gen_samples, img_summary = sess.run([self.superimages, self.image_summary], feed_dict)
 
         # save images generated for train and test captions
         print('Saving %s/train.jpg' % self.log_dir)
