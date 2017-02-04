@@ -69,8 +69,8 @@ def convert_birds_dataset_pickle(inpath, set):
 
         sketches.append(sketch)
 
-    print('Saving to %s'.format('Data/birds/%s/sketches.pickle'.format(set)))
-    pickle.dump(sketches, open('Data/birds/%s/sketches.pickle'.format(set), 'wb'))
+    print('Saving to {}'.format('Data/birds/{}/sketches.pickle'.format(set)))
+    pickle.dump(sketches, open('Data/birds/{}/sketches.pickle'.format(set), 'wb'))
 
 
 if __name__ == '__main__':
