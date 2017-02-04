@@ -70,7 +70,7 @@ class Dataset(object):
             transformed_images = np.zeros([images.shape[0], self._imsize, self._imsize, 3])
             transformed_sketches = None
             if sketches is not None:
-                transformed_sketches = np.zeros([sketches.shape[0], self._imsize, self._imsize])
+                transformed_sketches = np.zeros([sketches.shape[0], self._imsize * self._imsize])
             ori_size = images.shape[1]
             for i in range(images.shape[0]):
                 h1 = np.floor((ori_size - self._imsize) * np.random.random())
