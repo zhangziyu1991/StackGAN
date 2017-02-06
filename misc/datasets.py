@@ -208,7 +208,7 @@ class Dataset(object):
         #     batch = sampled_embeddings[:, i, :]
         #     sampled_embeddings_batchs.append(np.squeeze(batch))
 
-        return [sampled_images, [sampled_embeddings],
+        return [sampled_images, sampled_embeddings,
                 self._saveIDs[start:end], sampled_captions]
 
 

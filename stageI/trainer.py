@@ -409,42 +409,45 @@ class CondGANTrainer(object):
     def save_super_images(self, images, sample_batchs, filenames,
                           sentenceID, save_dir, subset):
         # batch_size samples for each embedding
-        numSamples = len(sample_batchs)
+        # numSamples = len(sample_batchs)
+        superimages = []
         for j in range(len(filenames)):
             s_tmp = '%s-1real-%dsamples/%s/%s' % \
-                    (save_dir, numSamples, subset, filenames[j])
+                    (save_dir, 1, subset, filenames[j])
             folder = s_tmp[:s_tmp.rfind('/')]
             if not os.path.isdir(folder):
                 print('Make a new folder: ', folder)
                 mkdir_p(folder)
-            superimage = [images[j]]
+            superimage = [images[j], sample_batchs[j]]
             # cfg.TRAIN.NUM_COPY samples for each text embedding/sentence
-            for i in range(len(sample_batchs)):
-                superimage.append(sample_batchs[i][j])
+            # for i in range(len(sample_batchs)):
+            #     superimage.append(sample_batchs[i][j])
 
             superimage = np.concatenate(superimage, axis=1)
-            fullpath = '%s_sentence%d.jpg' % (s_tmp, sentenceID)
-            scipy.misc.imsave(fullpath, superimage)
+            superimages.append(superimage)
+
+        superimages = np.concatenate(superimages, axis=0)
+        fullpath = '{}.jpg'.formace(s_tmp)
+        scipy.misc.imsave(fullpath, superimages)
 
     def eval_one_dataset(self, sess, dataset, save_dir, subset='train'):
         count = 0
         print('num_examples:', dataset._num_examples)
         while count < dataset._num_examples:
             start = count % dataset._num_examples
-            images, embeddings_batchs, filenames, _ = \
+            images, embeddings, filenames, _ = \
                 dataset.next_batch_test(self.batch_size, start, 1)
             print('count = ', count, 'start = ', start)
-            for i in range(len(embeddings_batchs)):
-                samples_batchs = []
-                # Generate up to 16 images for each sentence,
-                # with randomness from noise z and conditioning augmentation.
-                for j in range(np.minimum(16, cfg.TRAIN.NUM_COPY)):
-                    samples = sess.run(self.fake_images,
-                                       {self.embeddings: embeddings_batchs[i]})
-                    samples_batchs.append(samples)
-                self.save_super_images(images, samples_batchs,
-                                       filenames, i, save_dir,
-                                       subset)
+            # for i in range(len(embeddings_batchs)):
+            samples_batchs = []
+            # Generate up to 16 images for each sentence,
+            # with randomness from noise z and conditioning augmentation.
+            for j in range(np.minimum(16, cfg.TRAIN.NUM_COPY)):
+                samples = sess.run(self.fake_images, {self.embeddings: embeddings})
+                samples_batchs.append(samples)
+            self.save_super_images(images, samples_batchs,
+                                   filenames, 0, save_dir,
+                                   subset)
 
             count += self.batch_size
 
