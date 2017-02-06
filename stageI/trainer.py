@@ -426,7 +426,7 @@ class CondGANTrainer(object):
             superimage = np.concatenate(superimage, axis=1)
             superimages_row.append(superimage)
             if (j+1) % 8 == 0:
-                superimages.append(superimages_row)
+                superimages.append(np.concatenate(superimages_row, axis=1))
                 superimages_row = []
 
         superimages = np.concatenate(superimages, axis=0)
