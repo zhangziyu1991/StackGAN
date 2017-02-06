@@ -192,7 +192,7 @@ class Dataset(object):
 
         sampled_images, sampled_embeddings = self.transform(sampled_images, sampled_embeddings)
 
-        _, embedding_num, _ = sampled_embeddings.shape
+        # _, embedding_num, _ = sampled_embeddings.shape
         sampled_embeddings_batchs = []
 
         sampled_captions = []
@@ -204,11 +204,11 @@ class Dataset(object):
             # print(captions)
             sampled_captions.append(captions)
 
-        for i in range(np.minimum(max_captions, embedding_num)):
-            batch = sampled_embeddings[:, i, :]
-            sampled_embeddings_batchs.append(np.squeeze(batch))
+        # for i in range(np.minimum(max_captions, embedding_num)):
+        #     batch = sampled_embeddings[:, i, :]
+        #     sampled_embeddings_batchs.append(np.squeeze(batch))
 
-        return [sampled_images, sampled_embeddings_batchs,
+        return [sampled_images, [sampled_embeddings],
                 self._saveIDs[start:end], sampled_captions]
 
 
