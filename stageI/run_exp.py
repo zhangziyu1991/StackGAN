@@ -73,6 +73,7 @@ if __name__ == "__main__":
         ckt_logs_dir=ckt_logs_dir
     )
     if cfg.TRAIN.FLAG:
+        quit()
         algo.train()
     else:
         ''' For every input text embedding/sentence in the
