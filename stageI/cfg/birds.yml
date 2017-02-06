@@ -6,8 +6,8 @@ GPU_ID: -1
 Z_DIM: 100
 
 TRAIN:
-    FLAG: True
-    PRETRAINED_MODEL: ''
+    FLAG: False
+    PRETRAINED_MODEL: 'ckt_logs/birds/stageI_2017_02_04_16_34_12/model_138000.ckpt.data-00000-of-00001'
     BATCH_SIZE: 64
     NUM_COPY: 1
     MAX_EPOCH: 1000
