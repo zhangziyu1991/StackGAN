@@ -431,6 +431,8 @@ class CondGANTrainer(object):
 
         superimages = np.concatenate(superimages, axis=0)
         fullpath = '{}.jpg'.format(s_tmp)
+        print(fullpath)
+        print(superimages.shape)
         scipy.misc.imsave(fullpath, superimages)
 
     def eval_one_dataset(self, sess, dataset, save_dir, subset='train'):
