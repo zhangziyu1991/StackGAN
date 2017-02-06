@@ -419,7 +419,7 @@ class CondGANTrainer(object):
             if not os.path.isdir(folder):
                 print('Make a new folder: ', folder)
                 mkdir_p(folder)
-            superimage = [images[j], sample_batchs[j]]
+            superimage = [images[j], sample_batchs[j], np.zeros((64,8,3))]
             # cfg.TRAIN.NUM_COPY samples for each text embedding/sentence
             # for i in range(len(sample_batchs)):
             #     superimage.append(sample_batchs[i][j])
