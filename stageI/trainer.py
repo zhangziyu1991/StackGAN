@@ -411,6 +411,7 @@ class CondGANTrainer(object):
         # batch_size samples for each embedding
         # numSamples = len(sample_batchs)
         superimages = []
+        superimages_row = []
         for j in range(len(filenames)):
             s_tmp = '%s-1real-%dsamples/%s/%s' % \
                     (save_dir, 1, subset, filenames[j])
@@ -422,9 +423,11 @@ class CondGANTrainer(object):
             # cfg.TRAIN.NUM_COPY samples for each text embedding/sentence
             # for i in range(len(sample_batchs)):
             #     superimage.append(sample_batchs[i][j])
-
             superimage = np.concatenate(superimage, axis=1)
-            superimages.append(superimage)
+            superimages_row.append(superimage)
+            if (j+1) % 8 == 0:
+                superimages.append(superimages_row)
+                superimages_row = []
 
         superimages = np.concatenate(superimages, axis=0)
         fullpath = '{}.jpg'.formace(s_tmp)
