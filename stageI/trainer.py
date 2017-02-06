@@ -409,7 +409,7 @@ class CondGANTrainer(object):
     def save_super_images(self, images, sample_batchs, filenames,
                           sentenceID, save_dir, subset):
         # batch_size samples for each embedding
-        # numSamples = len(sample_batchs)
+        numSamples = len(sample_batchs)
         superimages = []
         superimages_row = []
         for j in range(len(filenames)):
@@ -445,10 +445,10 @@ class CondGANTrainer(object):
             samples_batchs = []
             # Generate up to 16 images for each sentence,
             # with randomness from noise z and conditioning augmentation.
-            for j in range(np.minimum(16, cfg.TRAIN.NUM_COPY)):
-                samples = sess.run(self.fake_images, {self.embeddings: embeddings})
-                samples_batchs.append(samples)
-            self.save_super_images(images, samples_batchs,
+            # for j in range(np.minimum(16, cfg.TRAIN.NUM_COPY)):
+            samples = sess.run(self.fake_images, {self.embeddings: embeddings})
+                # samples_batchs.append(samples)
+            self.save_super_images(images, samples,
                                    filenames, 0, save_dir,
                                    subset)
 
