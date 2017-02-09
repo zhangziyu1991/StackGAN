@@ -123,7 +123,7 @@ class CondGANTrainer(object):
         with pt.defaults_scope(phase=pt.Phase.test):
             with tf.variable_scope("g_net", reuse=True):
                 self.sampler()
-            self.visualization(cfg.TRAIN.NUM_COPY)
+            # self.visualization(cfg.TRAIN.NUM_COPY)
             print("success")
 
     def sampler(self):
