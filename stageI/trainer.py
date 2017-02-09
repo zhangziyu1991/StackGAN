@@ -47,8 +47,6 @@ class CondGANTrainer(object):
 
         self.log_vars = []
 
-        self.fake_images = None
-
     def build_placeholder(self):
         '''Helper function for init_opt'''
         self.images = tf.placeholder(
@@ -417,7 +415,7 @@ class CondGANTrainer(object):
     def save_super_images(self, images, sampled_batch, filenames, save_dir, subset):
         super_image = []
         for i in range(self.batch_size):
-            save_path = '{}-1real-{}samples/{}/{}.jpg' % (save_dir, cfg.TEST.NUM_COPY, subset, filenames[i])
+            save_path = '{}-1real-{}samples/{}/{}.jpg'.format(save_dir, cfg.TEST.NUM_COPY, subset, filenames[i])
             folder = save_path[:save_path.rfind('/')]
             if not os.path.isdir(folder):
                 print('Make a new folder: ', folder)
