@@ -47,6 +47,8 @@ class CondGANTrainer(object):
 
         self.log_vars = []
 
+        self.fake_images = None
+
     def build_placeholder(self):
         '''Helper function for init_opt'''
         self.images = tf.placeholder(
@@ -72,18 +74,19 @@ class CondGANTrainer(object):
             name='discriminator_learning_rate'
         )
 
+    # Given image embedding, get condition vector
     def sample_encoded_context(self, embeddings):
         '''Helper function for init_opt'''
         c_mean_logsigma = self.model.generate_condition(embeddings)
         mean = c_mean_logsigma[0]
         if cfg.TRAIN.COND_AUGMENTATION:
-            # epsilon = tf.random_normal(tf.shape(mean))
+            print('Using conditional augmentation.')
             epsilon = tf.truncated_normal(tf.shape(mean))
             stddev = tf.exp(c_mean_logsigma[1])
             c = mean + stddev * epsilon
-
             kl_loss = KL_loss(c_mean_logsigma[0], c_mean_logsigma[1])
         else:
+            print('Not using conditional augmentation.')
             c = mean
             kl_loss = 0
 
@@ -126,9 +129,14 @@ class CondGANTrainer(object):
     def sampler(self):
         c, _ = self.sample_encoded_context(self.embeddings)
         if cfg.TRAIN.FLAG:
+            print('Using all-zero z vector.')
             z = tf.zeros([self.batch_size, cfg.Z_DIM])  # Expect similar BGs
         else:
-            z = tf.random_normal([self.batch_size, cfg.Z_DIM])
+            print("Using same z's for all samples.")
+            z = tf.random_normal([1, cfg.Z_DIM], seed=123)
+            z = tf.tile(z, [self.batch_size, 1])
+            # print("Using different z's for different samples.")
+            # z = tf.random_normal([self.batch_size, cfg.Z_DIM])
         self.fake_images = self.model.get_generator(tf.concat(1, [c, z]))
 
     def compute_losses(self, images, wrong_images, fake_images, embeddings):
@@ -406,68 +414,49 @@ class CondGANTrainer(object):
                     if np.any(np.isnan(avg_log_vals)):
                         raise ValueError("NaN detected!")
 
-    def save_super_images(self, images, sample_batchs, filenames,
-                          sentenceID, save_dir, subset):
-        # batch_size samples for each embedding
-        numSamples = len(sample_batchs)
-        superimages = []
-        superimages_row = []
-        for j in range(len(filenames)):
-            s_tmp = '%s-1real-%dsamples/%s/%s' % \
-                    (save_dir, 1, subset, filenames[j])
-            folder = s_tmp[:s_tmp.rfind('/')]
+    def save_super_images(self, images, sampled_batch, filenames, save_dir, subset):
+        super_image = []
+        for i in range(self.batch_size):
+            save_path = '{}-1real-{}samples/{}/{}.jpg' % (save_dir, cfg.TEST.NUM_COPY, subset, filenames[i])
+            folder = save_path[:save_path.rfind('/')]
             if not os.path.isdir(folder):
                 print('Make a new folder: ', folder)
                 mkdir_p(folder)
-            superimage = [images[j], sample_batchs[j], np.zeros((64,8,3))]
-            # cfg.TRAIN.NUM_COPY samples for each text embedding/sentence
-            # for i in range(len(sample_batchs)):
-            #     superimage.append(sample_batchs[i][j])
-            superimage = np.concatenate(superimage, axis=1)
-            superimages_row.append(superimage)
-            if (j+1) % 8 == 0:
-                superimages.append(np.concatenate(superimages_row, axis=1))
-                superimages_row = []
+            super_image_row = [images[i]]
+            for j in range(cfg.TEST.NUM_COPY):
+                super_image_row.append(sampled_batch[j][i])
 
-        superimages = np.concatenate(superimages, axis=0)
-        fullpath = '{}.jpg'.format(s_tmp)
-        print(fullpath)
-        print(superimages.shape)
-        scipy.misc.imsave(fullpath, superimages)
+            super_image.append(np.concatenate(super_image_row, axis=1))
+
+        super_image = np.concatenate(super_image, axis=0)
+        print('Saving to: {}'.format(save_path))
+        print('Super image shape: {}'.format(super_image.shape))
+        scipy.misc.imsave(save_path, super_image)
 
     def eval_one_dataset(self, sess, dataset, save_dir, subset='train'):
         count = 0
-        print('num_examples:', dataset._num_examples)
-        while count < dataset._num_examples:
-            start = count % dataset._num_examples
-            images, embeddings, filenames, _ = \
-                dataset.next_batch_test(self.batch_size, start, 1)
+        print('num_examples: {}'.format(dataset._num_examples))
+        while count < dataset.num_examples:
+            start = count % dataset.num_examples
+            images, embeddings, filenames = dataset.next_batch_test(self.batch_size, start)
             print('count = ', count, 'start = ', start)
-            # for i in range(len(embeddings_batchs)):
-            samples_batchs = []
-            # Generate up to 16 images for each sentence,
-            # with randomness from noise z and conditioning augmentation.
-            # for j in range(np.minimum(16, cfg.TRAIN.NUM_COPY)):
-            samples = sess.run(self.fake_images, {self.embeddings: embeddings})
-                # samples_batchs.append(samples)
-            self.save_super_images(images, samples,
-                                   filenames, 0, save_dir,
-                                   subset)
+
+            sampled_batch = []
+            for j in range(cfg.TEST.NUM_COPY):
+                sampled = sess.run(self.fake_images, {self.embeddings: embeddings})
+                sampled_batch.append(sampled)
+            self.save_super_images(images, sampled_batch, filenames, save_dir, subset)
 
             count += self.batch_size
 
     def evaluate(self):
-        config = tf.ConfigProto(allow_soft_placement=True)
-        with tf.Session(config=config) as sess:
-            with tf.device("/gpu:%d" % cfg.GPU_ID):
+        with tf.Session(config=tf.ConfigProto(allow_soft_placement=True)) as sess:
+            with tf.device('/gpu:%d'.format(cfg.GPU_ID)):
                 if self.model_path.find('.ckpt') != -1:
                     self.init_opt()
                     print("Reading model parameters from %s" % self.model_path)
                     saver = tf.train.Saver(tf.all_variables())
                     saver.restore(sess, self.model_path)
-                    # self.eval_one_dataset(sess, self.dataset.train,
-                    #                       self.log_dir, subset='train')
-                    self.eval_one_dataset(sess, self.dataset.test,
-                                          self.log_dir, subset='test')
+                    self.eval_one_dataset(sess, self.dataset.test, self.log_dir, subset='test')
                 else:
                     print("Input a valid model path.")
