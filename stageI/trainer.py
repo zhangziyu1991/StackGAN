@@ -451,10 +451,10 @@ class CondGANTrainer(object):
 
     def evaluate(self):
         with tf.Session(config=tf.ConfigProto(allow_soft_placement=True)) as sess:
-            with tf.device('/gpu:%d'.format(cfg.GPU_ID)):
+            with tf.device('/gpu:{}'.format(cfg.GPU_ID)):
                 if self.model_path.find('.ckpt') != -1:
                     self.init_opt()
-                    print("Reading model parameters from %s" % self.model_path)
+                    print("Reading model parameters from {}".format(self.model_path))
                     saver = tf.train.Saver(tf.all_variables())
                     saver.restore(sess, self.model_path)
                     self.eval_one_dataset(sess, self.dataset.test, self.log_dir, subset='test')
