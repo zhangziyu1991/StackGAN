@@ -208,9 +208,9 @@ class TextDataset(object):
         lr_imsize = 64
         self.hr_lr_ratio = hr_lr_ratio
         if self.hr_lr_ratio == 1:
-            self.image_filename = '/76images.pickle'
+            self.image_filename = '/76images_flying.pickle'
         elif self.hr_lr_ratio == 4:
-            self.image_filename = '/304images.pickle'
+            self.image_filename = '/304images_flying.pickle'
 
         self.image_shape = [lr_imsize * self.hr_lr_ratio,
                             lr_imsize * self.hr_lr_ratio, 3]
@@ -221,7 +221,7 @@ class TextDataset(object):
         self.workdir = workdir
         if embedding_type == 'cnn-rnn':
             # self.embedding_filename = '/char-CNN-RNN-embeddings.pickle'
-            self.embedding_filename = '/sketches.pickle'
+            self.embedding_filename = '/sketches_flying.pickle'
         elif embedding_type == 'skip-thought':
             self.embedding_filename = '/skip-thought-embeddings.pickle'
 
@@ -229,26 +229,25 @@ class TextDataset(object):
         with open(pickle_path + self.image_filename, 'rb') as f:
             images = pickle.load(f)
             # images = images[0:20]
-            # images = images[0:2] + images[0:2] + images[0:2] + images[0:2]
             images = np.array(images)
             print('images: ', images.shape)
 
         with open(pickle_path + self.embedding_filename, 'rb') as f:
             embeddings = pickle.load(f)
             # embeddings = embeddings[0:20]
-            # embeddings = embeddings[0:2] + embeddings[0:2] + embeddings[0:2] + embeddings[0:2]
             embeddings = np.array(embeddings)
             self.embedding_shape = [self.image_shape[0] * self.image_shape[0]]
             print('embeddings: ', embeddings.shape)
-        with open(pickle_path + '/filenames.pickle', 'rb') as f:
+
+        with open(pickle_path + '/filenames_flying.pickle', 'rb') as f:
             list_filenames = pickle.load(f)
             # list_filenames = list_filenames[0:20]
-            # list_filenames = list_filenames[0:2] + list_filenames[0:2] + list_filenames[0:2] + list_filenames[0:2]
             print('list_filenames: ', len(list_filenames), list_filenames[0])
-        with open(pickle_path + '/class_info.pickle', 'rb') as f:
+
+        with open(pickle_path + '/class_info_flying.pickle', 'rb') as f:
             class_id = pickle.load(f)
             # class_id = class_id[0:20]
-            # class_id = class_id[0:2] + class_id[0:2] + class_id[0:2] + class_id[0:2]
+            class_id = None
 
         return Dataset(images, self.image_shape[0], embeddings,
                        list_filenames, self.workdir, None,

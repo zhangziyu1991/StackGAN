@@ -121,7 +121,7 @@ class CondGANTrainer(object):
         with pt.defaults_scope(phase=pt.Phase.test):
             with tf.variable_scope("g_net", reuse=True):
                 self.sampler()
-            # self.visualization(cfg.TRAIN.NUM_COPY)
+            self.visualization(cfg.TRAIN.NUM_COPY)
             print("success")
 
     def sampler(self):
@@ -130,11 +130,11 @@ class CondGANTrainer(object):
             print('Using all-zero z vector.')
             z = tf.zeros([self.batch_size, cfg.Z_DIM])  # Expect similar BGs
         else:
-            print("Using same z's for all samples.")
-            z = tf.random_normal([1, cfg.Z_DIM], seed=123)
-            z = tf.tile(z, [self.batch_size, 1])
-            # print("Using different z's for different samples.")
-            # z = tf.random_normal([self.batch_size, cfg.Z_DIM])
+            # print("Using same z's for all samples.")
+            # z = tf.random_normal([1, cfg.Z_DIM], seed=123)
+            # z = tf.tile(z, [self.batch_size, 1])
+            print("Using different z's for different samples.")
+            z = tf.random_normal([self.batch_size, cfg.Z_DIM])
         self.fake_images = self.model.get_generator(tf.concat(1, [c, z]))
 
     def compute_losses(self, images, wrong_images, fake_images, embeddings):

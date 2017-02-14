@@ -22,12 +22,12 @@ import pandas as pd
 
 LR_HR_RETIO = 4
 IMSIZE = 256
-LOAD_SIZE = int(IMSIZE * 64 / 64)
+LOAD_SIZE = int(IMSIZE * 76 / 64)
 BIRD_DIR = 'Data/birds'
 
 
 def load_filenames(data_dir):
-    filepath = data_dir + 'filenames.pickle'
+    filepath = data_dir + 'filenames_flying.pickle'
     with open(filepath, 'rb') as f:
         filenames = pickle.load(f)
     print('Load filenames from: %s (%d)' % (filepath, len(filenames)))
@@ -77,12 +77,12 @@ def save_data_list(inpath, outpath, filenames, filename_bbox):
 
     print('images', len(hr_images), hr_images[0].shape, lr_images[0].shape)
 
-    outfile = outpath + str(LOAD_SIZE) + 'images.pickle'
+    outfile = outpath + str(LOAD_SIZE) + 'images_flying.pickle'
     with open(outfile, 'wb') as f_out:
         pickle.dump(hr_images, f_out)
         print('save to: ', outfile)
 
-    outfile = outpath + str(lr_size) + 'images.pickle'
+    outfile = outpath + str(lr_size) + 'images_flying.pickle'
     with open(outfile, 'wb') as f_out:
         pickle.dump(lr_images, f_out)
         print('save to: ', outfile)
@@ -97,9 +97,9 @@ def convert_birds_dataset_pickle(inpath):
     save_data_list(inpath, train_dir, train_filenames, filename_bbox)
 
     # ## For Test data
-    test_dir = os.path.join(inpath, 'test/')
-    test_filenames = load_filenames(test_dir)
-    save_data_list(inpath, test_dir, test_filenames, filename_bbox)
+    # test_dir = os.path.join(inpath, 'test/')
+    # test_filenames = load_filenames(test_dir)
+    # save_data_list(inpath, test_dir, test_filenames, filename_bbox)
 
 
 if __name__ == '__main__':
