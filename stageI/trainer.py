@@ -208,12 +208,13 @@ class CondGANTrainer(object):
         self.d_sum = tf.merge_summary(all_sum['d'])
         self.hist_sum = tf.merge_summary(all_sum['hist'])
 
-    def visualize_one_superimage(self, img_var, images, rows, filename):
+    def visualize_one_superimage(self, img_var, images, rows, filename, embeddings):
         stacked_img = []
         for row in range(rows):
             img = images[row, :, :, :]
             row_img = [img]  # real image
             # for col in range(1):
+            row.image.append(255 * (embeddings[row, :, :, :] + 0.5))
             row_img.append(img_var[row, :, :, :])
             # each row has 1 real image + 1 fake images
             stacked_img.append(tf.concat(1, row_img))
@@ -226,13 +227,13 @@ class CondGANTrainer(object):
             self.visualize_one_superimage(self.fake_images[: 10],
                                           self.images[: 10],
                                           10,
-                                          "train")
+                                          "train", self.embeddings[: 10])
         # self.visualize_one_superimage(self.fake_images[:n * n], self.images[:n * n], n, "train")
         fake_sum_test, superimage_test = \
             self.visualize_one_superimage(self.fake_images[10: 20],
                                           self.images[10: 20],
                                           10,
-                                          "test")
+                                          "test", self.embeddings[10: 20])
         # fake_sum_test, superimage_test = \
         #     self.visualize_one_superimage(self.fake_images[:n * n],
         #                                   self.images[:n * n],
@@ -393,9 +394,9 @@ class CondGANTrainer(object):
                             fn = saver.save(sess, snapshot_path)
                             print("Model saved in file: %s" % fn)
 
-
-                    img_sum = self.epoch_sum_images(sess, cfg.TRAIN.NUM_COPY, epoch+1)
-                    summary_writer.add_summary(img_sum, counter)
+                    if epoch % 40 == 0:
+                        img_sum = self.epoch_sum_images(sess, cfg.TRAIN.NUM_COPY, epoch+1)
+                        summary_writer.add_summary(img_sum, counter)
 
                     avg_log_vals = np.mean(np.array(all_log_vals), axis=0)
                     dic_logs = {}
