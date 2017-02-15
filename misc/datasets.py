@@ -48,6 +48,10 @@ class Dataset(object):
     def epochs_completed(self):
         return self._epochs_completed
 
+    @property
+    def imsize(self):
+        return self._imsize
+
     def saveIDs(self):
         self._saveIDs = np.arange(self._num_examples)
         np.random.shuffle(self._saveIDs)
