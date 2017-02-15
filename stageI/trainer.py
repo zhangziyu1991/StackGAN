@@ -6,6 +6,7 @@ import tensorflow as tf
 import numpy as np
 import scipy.misc
 import os
+import scipy
 import sys
 from six.moves import range
 from progressbar import ETA, Bar, Percentage, ProgressBar
@@ -214,7 +215,7 @@ class CondGANTrainer(object):
             img = images[row, :, :, :]
             row_img = [img]  # real image
             # for col in range(1):
-            row_img.append(255 * (tf.tile(tf.reshape(embeddings[row, :], [self.dataset.train.imsize, self.dataset.train.imsize, 1]), [1, 1, 3]) + 0.5))
+            row_img.append(2 * tf.tile(tf.reshape(embeddings[row, :], [self.dataset.train.imsize, self.dataset.train.imsize, 1]), [1, 1, 3]))
             row_img.append(img_var[row, :, :, :])
             # each row has 1 real image + 1 fake images
             stacked_img.append(tf.concat(1, row_img))
@@ -274,9 +275,13 @@ class CondGANTrainer(object):
 
         # save images generated for train and test captions
         print('Saving %s/train.jpg' % self.log_dir)
-        scipy.misc.imsave('{}/train_epoch{}.jpg'.format(self.log_dir, epoch), gen_samples[0])
+        scipy.toimage(255. * (gen_samples[0] + 1), cmin=0, cmax=255).save(
+            '{}/train_epoch{}.jpg'.format(self.log_dir, epoch))
+        # scipy.misc.imsave('{}/train_epoch{}.jpg'.format(self.log_dir, epoch), gen_samples[0])
         print('Saving %s/test.jpg' % self.log_dir)
-        scipy.misc.imsave('{}/test_epoch{}.jpg'.format(self.log_dir, epoch), gen_samples[1])
+        scipy.toimage(255. * (gen_samples[1] + 1), cmin=0, cmax=255).save(
+            '{}/test_epoch{}.jpg'.format(self.log_dir, epoch))
+        # scipy.misc.imsave('{}/test_epoch{}.jpg'.format(self.log_dir, epoch), gen_samples[1])
 
         # pfi_train = open(self.log_dir + "/train.txt", "w")
         pfi_test = open(self.log_dir + "/test.txt", "w")
