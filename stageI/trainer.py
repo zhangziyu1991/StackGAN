@@ -274,11 +274,11 @@ class CondGANTrainer(object):
 
         # save images generated for train and test captions
         print('Saving %s/train.jpg' % self.log_dir)
-        scipy.misc.toimage(255. * (gen_samples[0] + 1), cmin=0, cmax=255).save(
+        scipy.misc.toimage(255.0 / 2.0 * (gen_samples[0] + 1.0), cmin=0, cmax=255).save(
             '{}/train_epoch{}.jpg'.format(self.log_dir, epoch))
         # scipy.misc.imsave('{}/train_epoch{}.jpg'.format(self.log_dir, epoch), gen_samples[0])
         print('Saving %s/test.jpg' % self.log_dir)
-        scipy.misc.toimage(255. * (gen_samples[1] + 1), cmin=0, cmax=255).save(
+        scipy.misc.toimage(255.0 / 2.0 * (gen_samples[1] + 1.0), cmin=0, cmax=255).save(
             '{}/test_epoch{}.jpg'.format(self.log_dir, epoch))
         # scipy.misc.imsave('{}/test_epoch{}.jpg'.format(self.log_dir, epoch), gen_samples[1])
 
@@ -398,7 +398,7 @@ class CondGANTrainer(object):
                             fn = saver.save(sess, snapshot_path)
                             print("Model saved in file: %s" % fn)
 
-                    if epoch % 40 == 0:
+                    if (epoch+1) % 10 == 0:
                         img_sum = self.epoch_sum_images(sess, cfg.TRAIN.NUM_COPY, epoch+1)
                         summary_writer.add_summary(img_sum, counter)
 
