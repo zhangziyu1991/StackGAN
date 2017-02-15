@@ -87,7 +87,6 @@ class CondGANTrainer(object):
             print('Not using conditional augmentation.')
             c = mean
             kl_loss = 0
-
         return c, cfg.TRAIN.COEFF.KL * kl_loss
 
     def init_opt(self):
@@ -122,19 +121,19 @@ class CondGANTrainer(object):
             with tf.variable_scope("g_net", reuse=True):
                 self.sampler()
             self.visualization(cfg.TRAIN.NUM_COPY)
-            print("success")
+            print("Set up training-time visualization successfully.")
 
     def sampler(self):
         c, _ = self.sample_encoded_context(self.embeddings)
         if cfg.TRAIN.FLAG:
-            print('Using all-zero z vector.')
-            z = tf.zeros([self.batch_size, cfg.Z_DIM])  # Expect similar BGs
+            print('Using all-zero z vector for training-time visualization.')
+            z = tf.zeros([self.batch_size, cfg.Z_DIM])
         else:
-            # print("Using same z's for all samples.")
-            # z = tf.random_normal([1, cfg.Z_DIM], seed=123)
-            # z = tf.tile(z, [self.batch_size, 1])
-            print("Using different z's for different samples.")
-            z = tf.random_normal([self.batch_size, cfg.Z_DIM])
+            print("Using same z's for all samples.")
+            z = tf.random_normal([1, cfg.Z_DIM], seed=123)
+            z = tf.tile(z, [self.batch_size, 1])
+            # print("Using different z's for different samples.")
+            # z = tf.random_normal([self.batch_size, cfg.Z_DIM])
         self.fake_images = self.model.get_generator(tf.concat(1, [c, z]))
 
     def compute_losses(self, images, wrong_images, fake_images, embeddings):
