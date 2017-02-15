@@ -417,10 +417,6 @@ class CondGANTrainer(object):
     def save_super_images(self, images, sampled_batch, filenames, save_dir, subset, embeddings):
         super_image = []
         for i in range(self.batch_size):
-            folder = save_path[:save_path.rfind('/')]
-            if not os.path.isdir(folder):
-                print('Make a new folder: ', folder)
-                mkdir_p(folder)
             super_image_row = [images[i], 2 * np.tile(np.reshape(embeddings[i, :], (self.dataset.train.imsize, self.dataset.train.imsize, 1)), (1, 1, 3))]
             for j in range(cfg.TEST.NUM_COPY):
                 super_image_row.append(sampled_batch[j][i])
@@ -429,6 +425,10 @@ class CondGANTrainer(object):
         super_image = np.concatenate(super_image, axis=0)
 
         save_path = '{}-1real-{}samples/{}/{}.jpg'.format(save_dir, cfg.TEST.NUM_COPY, subset, filenames[0])
+        folder = save_path[:save_path.rfind('/')]
+        if not os.path.isdir(folder):
+            print('Make a new folder: ', folder)
+            mkdir_p(folder)
 
         print('Saving to: {}'.format(save_path))
         print('Super image shape: {}'.format(super_image.shape))
