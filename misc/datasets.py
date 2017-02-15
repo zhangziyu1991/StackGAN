@@ -250,7 +250,7 @@ class TextDataset(object):
         with open(pickle_path + '/class_info_flying.pickle', 'rb') as f:
             class_id = pickle.load(f)
             # class_id = class_id[0:20]
-            class_id = None
+            # class_id = None
 
         return Dataset(images, self.image_shape[0], embeddings,
                        list_filenames, self.workdir, None,
