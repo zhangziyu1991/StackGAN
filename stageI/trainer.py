@@ -6,7 +6,6 @@ import tensorflow as tf
 import numpy as np
 import scipy.misc
 import os
-import scipy
 import sys
 from six.moves import range
 from progressbar import ETA, Bar, Percentage, ProgressBar
@@ -275,11 +274,11 @@ class CondGANTrainer(object):
 
         # save images generated for train and test captions
         print('Saving %s/train.jpg' % self.log_dir)
-        scipy.toimage(255. * (gen_samples[0] + 1), cmin=0, cmax=255).save(
+        scipy.misc.toimage(255. * (gen_samples[0] + 1), cmin=0, cmax=255).save(
             '{}/train_epoch{}.jpg'.format(self.log_dir, epoch))
         # scipy.misc.imsave('{}/train_epoch{}.jpg'.format(self.log_dir, epoch), gen_samples[0])
         print('Saving %s/test.jpg' % self.log_dir)
-        scipy.toimage(255. * (gen_samples[1] + 1), cmin=0, cmax=255).save(
+        scipy.misc.toimage(255. * (gen_samples[1] + 1), cmin=0, cmax=255).save(
             '{}/test_epoch{}.jpg'.format(self.log_dir, epoch))
         # scipy.misc.imsave('{}/test_epoch{}.jpg'.format(self.log_dir, epoch), gen_samples[1])
 
