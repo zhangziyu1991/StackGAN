@@ -162,9 +162,7 @@ class CondGANTrainer(object):
         self.log_vars.append(("d_loss_real", real_d_loss))
         self.log_vars.append(("d_loss_fake", fake_d_loss))
 
-        generator_loss = \
-            tf.nn.sigmoid_cross_entropy_with_logits(fake_logit,
-                                                    tf.ones_like(fake_logit))
+        generator_loss = tf.nn.sigmoid_cross_entropy_with_logits(fake_logit, tf.ones_like(fake_logit))
         generator_loss = tf.reduce_mean(generator_loss)
 
         return discriminator_loss, generator_loss
@@ -416,24 +414,25 @@ class CondGANTrainer(object):
                     if np.any(np.isnan(avg_log_vals)):
                         raise ValueError("NaN detected!")
 
-    def save_super_images(self, images, sampled_batch, filenames, save_dir, subset):
+    def save_super_images(self, images, sampled_batch, filenames, save_dir, subset, embeddings):
         super_image = []
         for i in range(self.batch_size):
-            save_path = '{}-1real-{}samples/{}/{}.jpg'.format(save_dir, cfg.TEST.NUM_COPY, subset, filenames[i])
             folder = save_path[:save_path.rfind('/')]
             if not os.path.isdir(folder):
                 print('Make a new folder: ', folder)
                 mkdir_p(folder)
-            super_image_row = [images[i]]
+            super_image_row = [images[i], 2 * np.tile(np.reshape(embeddings[i, :], (self.dataset.train.imsize, self.dataset.train.imsize, 1)), (1, 1, 3))]
             for j in range(cfg.TEST.NUM_COPY):
                 super_image_row.append(sampled_batch[j][i])
 
             super_image.append(np.concatenate(super_image_row, axis=1))
-
         super_image = np.concatenate(super_image, axis=0)
+
+        save_path = '{}-1real-{}samples/{}/{}.jpg'.format(save_dir, cfg.TEST.NUM_COPY, subset, filenames[0])
+
         print('Saving to: {}'.format(save_path))
         print('Super image shape: {}'.format(super_image.shape))
-        scipy.misc.imsave(save_path, super_image)
+        scipy.misc.toimage(255.0 / 2.0 * (super_image + 1.0), cmin=0, cmax=255).save(save_path)
 
     def eval_one_dataset(self, sess, dataset, save_dir, subset='train'):
         count = 0
@@ -447,7 +446,7 @@ class CondGANTrainer(object):
             for j in range(cfg.TEST.NUM_COPY):
                 sampled = sess.run(self.fake_images, {self.embeddings: embeddings})
                 sampled_batch.append(sampled)
-            self.save_super_images(images, sampled_batch, filenames, save_dir, subset)
+            self.save_super_images(images, sampled_batch, filenames, save_dir, subset, embeddings)
 
             count += self.batch_size
 

@@ -188,7 +188,7 @@ class Dataset(object):
 
         sampled_images = self._images[start:end]
         sampled_images = sampled_images.astype(np.float32)
-        sampled_images = sampled_images * (2. / 255) - 1.
+        sampled_images = sampled_images * (2.0 / 255.0) - 1.0
         sampled_embeddings = self._embeddings[start:end]
         sampled_images, sampled_embeddings = self.transform(sampled_images, sampled_embeddings)
 
