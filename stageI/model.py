@@ -27,11 +27,13 @@ class CondGAN(object):
         # We do not do this for G,
         # because batch_norm needs different options for training and testing
         if cfg.GAN.NETWORK_TYPE == "default":
+            print('Using default network.')
             with tf.variable_scope("d_net"):
                 self.d_encode_img_template = self.d_encode_image()
                 self.d_context_template = self.context_embedding()
                 self.discriminator_template = self.discriminator()
         elif cfg.GAN.NETWORK_TYPE == "simple":
+            print('Using simple network.')
             with tf.variable_scope("d_net"):
                 self.d_encode_img_template = self.d_encode_image_simple()
                 self.d_context_template = self.context_embedding()
