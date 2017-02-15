@@ -135,9 +135,6 @@ class Dataset(object):
 
         current_ids = self._perm[start:end]
         fake_ids = np.random.randint(self._num_examples, size=batch_size)
-        print(current_ids)
-        print(fake_ids)
-        print(self._class_id)
         collision_flag = \
             (self._class_id[current_ids] == self._class_id[fake_ids])
         fake_ids[collision_flag] = \
