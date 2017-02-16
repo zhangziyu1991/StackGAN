@@ -48,16 +48,15 @@ if __name__ == "__main__":
         datadir = '/Users/zzhang/StackGAN/Data/%s' % cfg.DATASET_NAME
     else:
         datadir = 'Data/%s' % cfg.DATASET_NAME
+
     dataset = TextDataset(datadir, cfg.EMBEDDING_TYPE, 1)
-    filename_test = '%s/train' % (datadir)
-    dataset.test = dataset.get_data(filename_test, aug_flag=True)
+    filename_test = '{}/train'.format(datadir)
+    dataset.test = dataset.get_data(filename_test, 886, aug_flag=True)
     if cfg.TRAIN.FLAG:
-        filename_train = '%s/train' % (datadir)
-        dataset.train = dataset.get_data(filename_train, aug_flag=True)
-        ckt_logs_dir = "ckt_logs/%s/%s_%s" % \
-            (cfg.DATASET_NAME, cfg.CONFIG_NAME, timestamp)
-        # ckt_logs_dir = "ckt_logs/%s" % \
-        #                (cfg.DATASET_NAME)
+        filename_train = '{}/train'.format(datadir)
+        dataset.train = dataset.get_data(filename_train, 886, aug_flag=True)
+        dataset.train2 = dataset.get_data(filename_train, 7969, aug_flag=True)
+        ckt_logs_dir = "ckt_logs/{}/{}_{}".format(cfg.DATASET_NAME, cfg.CONFIG_NAME, timestamp)
         mkdir_p(ckt_logs_dir)
     else:
         s_tmp = cfg.TRAIN.PRETRAINED_MODEL

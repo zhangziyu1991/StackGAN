@@ -212,32 +212,33 @@ class TextDataset(object):
     def __init__(self, workdir, embedding_type, hr_lr_ratio):
         lr_imsize = 64
         self.hr_lr_ratio = hr_lr_ratio
-        if self.hr_lr_ratio == 1:
-            self.image_filename = '/76images_flying.pickle'
-        elif self.hr_lr_ratio == 4:
-            self.image_filename = '/304images_flying.pickle'
+        # if self.hr_lr_ratio == 1:
+        #     self.image_filename = '/76images_flying.pickle'
+        # elif self.hr_lr_ratio == 4:
+        #     self.image_filename = '/304images_flying.pickle'
 
         self.image_shape = [lr_imsize * self.hr_lr_ratio,
                             lr_imsize * self.hr_lr_ratio, 3]
         self.image_dim = self.image_shape[0] * self.image_shape[1] * 3
         self.embedding_shape = None
         self.train = None
+        self.train2 = None
         self.test = None
         self.workdir = workdir
-        if embedding_type == 'cnn-rnn':
-            # self.embedding_filename = '/char-CNN-RNN-embeddings.pickle'
-            self.embedding_filename = '/sketches_flying.pickle'
-        elif embedding_type == 'skip-thought':
-            self.embedding_filename = '/skip-thought-embeddings.pickle'
+        # if embedding_type == 'cnn-rnn':
+        #     # self.embedding_filename = '/char-CNN-RNN-embeddings.pickle'
+        #     self.embedding_filename = '/sketches_flying.pickle'
+        # elif embedding_type == 'skip-thought':
+        #     self.embedding_filename = '/skip-thought-embeddings.pickle'
 
-    def get_data(self, pickle_path, aug_flag=True):
-        with open(pickle_path + self.image_filename, 'rb') as f:
+    def get_data(self, pickle_path, subset=None, aug_flag=True):
+        with open(pickle_path + '/76images_flying_{}.pickle'.format(subset), 'rb') as f:
             images = pickle.load(f)
             # images = images[0:20]
             images = np.array(images)
             print('images: ', images.shape)
 
-        with open(pickle_path + self.embedding_filename, 'rb') as f:
+        with open(pickle_path + '/sketches_flying_{}.pickle'.format(subset), 'rb') as f:
             embeddings = pickle.load(f)
             # embeddings = embeddings[0:20]
             embeddings = np.array(embeddings)
@@ -245,12 +246,12 @@ class TextDataset(object):
             self.embedding_shape = [self.image_shape[0], self.image_shape[0], 1]
             print('embeddings: ', embeddings.shape)
 
-        with open(pickle_path + '/filenames_flying.pickle', 'rb') as f:
+        with open(pickle_path + '/filenames_flying_{}.pickle'.format(subset), 'rb') as f:
             list_filenames = pickle.load(f)
             # list_filenames = list_filenames[0:20]
             print('list_filenames: ', len(list_filenames), list_filenames[0])
 
-        with open(pickle_path + '/class_info_flying.pickle', 'rb') as f:
+        with open(pickle_path + '/class_info_flying_{}.pickle'.format(subset), 'rb') as f:
             class_id = pickle.load(f)
             # class_id = class_id[0:20]
             # class_id = None

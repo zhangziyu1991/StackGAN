@@ -360,8 +360,15 @@ class CondGANTrainer(object):
 
                         # training d
                         images, wrong_images, embeddings, _, _ = \
-                            self.dataset.train.next_batch(self.batch_size,
-                                                          num_embedding)
+                            self.dataset.train.next_batch(self.batch_size / 2, num_embedding)
+
+                        images2, wrong_images2, embeddings2, _, _ = \
+                            self.dataset.train2.next_batch(self.batch_size / 2, num_embedding)
+
+                        images = np.concatenate((images, images2), axis=0)
+                        wrong_images = np.concatenate((wrong_images, wrong_images2), axis=0)
+                        embeddings = np.concatenate((embeddings, embeddings2), axis=0)
+
                         feed_dict = {self.images: images,
                                      self.wrong_images: wrong_images,
                                      self.embeddings: embeddings,
@@ -389,11 +396,9 @@ class CondGANTrainer(object):
                         # save checkpoint
                         counter += 1
                         if counter % self.snapshot_interval == 0:
-                            snapshot_path = "%s/%s" % \
-                                            (self.checkpoint_dir,
-                                             self.exp_name)
+                            snapshot_path = "%s/%s".format(self.checkpoint_dir, self.exp_name)
                             fn = saver.save(sess, snapshot_path, global_step=counter)
-                            print("Model saved in file: %s".format(fn))
+                            print("Model saved in file: {}".format(snapshot_path))
 
                     if (epoch+1) % 50 == 0 or (epoch+1) < 20:
                         img_sum = self.epoch_sum_images(sess, cfg.TRAIN.NUM_COPY, epoch+1)
