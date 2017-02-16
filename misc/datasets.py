@@ -75,7 +75,7 @@ class Dataset(object):
             transformed_images = np.zeros([batch_size, self._imsize, self._imsize, 3])
             transformed_sketches = None
             if sketches is not None:
-                transformed_sketches = np.zeros([batch_size] + self.embedding_shape)
+                transformed_sketches = np.zeros([batch_size, self._imsize, self._imsize, 1])
             ori_size = images.shape[1]
             for i in range(images.shape[0]):
                 h1 = np.floor((ori_size - self._imsize) * np.random.random())
