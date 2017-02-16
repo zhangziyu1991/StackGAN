@@ -240,7 +240,7 @@ class TextDataset(object):
             embeddings = pickle.load(f)
             # embeddings = embeddings[0:20]
             embeddings = np.array(embeddings)
-            self.embedding_shape = [self.image_shape[0], self.image_shape[0]]
+            self.embedding_shape = [self.image_shape[0], self.image_shape[0], 1]
             print('embeddings: ', embeddings.shape)
 
         with open(pickle_path + '/filenames_flying.pickle', 'rb') as f:
