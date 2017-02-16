@@ -46,9 +46,34 @@ class CondGAN(object):
     def generate_condition(self, c_var):
         conditions =\
             (pt.wrap(c_var).
+             # additional convolutions begin
+             custom_conv2d(self.ef_dim / 2, k_h=3, k_w=3, d_h=1, d_w=1).
+             conv_batch_norm().
+             apply(tf.nn.relu).
+
+             custom_conv2d(self.ef_dim / 2, k_h=3, k_w=3, d_h=1, d_w=1).
+             conv_batch_norm().
+             apply(tf.nn.relu).
+
+             max_pool(2, 2, edges=pt.PAD_VALID).
+
+             custom_conv2d(self.ef_dim, k_h=3, k_w=3, d_h=1, d_w=1).
+             conv_batch_norm().
+             apply(tf.nn.relu).
+
+             custom_conv2d(self.ef_dim, k_h=3, k_w=3, d_h=1, d_w=1).
+             conv_batch_norm().
+             apply(tf.nn.relu).
+
+             max_pool(2, 2, edges=pt.PAD_VALID).
+
+             # custom_conv2d(self.ef_dim * 2, k_h=3, k_w=3, d_h=1, d_w=1).
+             # conv_batch_norm().
+             # average_pool(self.image_shape, 1, pt.PAD_VALID).
+             # additional convolution end
              flatten().
-             custom_fully_connected(self.ef_dim * 2).
-             apply(leaky_rectify, leakiness=0.2))
+             custom_fully_connected(self.ef_dim * 2))
+             # apply(leaky_rectify, leakiness=0.2))
         mean = conditions[:, :self.ef_dim]
         log_sigma = conditions[:, self.ef_dim:]
         return [mean, log_sigma]
@@ -57,6 +82,16 @@ class CondGAN(object):
     def generator(self, z_var):
         node1_0 =\
             (pt.wrap(z_var).
+             # additional convolutions begin
+             # custom_conv2d(self.gf_dim * 2, k_h=1, k_w=1, d_h=1, d_w=1).
+             # conv_batch_norm().
+             # apply(tf.nn.relu).
+             # custom_conv2d(self.gf_dim * 2, k_h=1, k_w=1, d_h=1, d_w=1).
+             # conv_batch_norm().
+             # apply(tf.nn.relu).
+             # custom_conv2d(self.gf_dim * 2, k_h=1, k_w=1, d_h=1, d_w=1).
+             # conv_batch_norm())
+             # additional convolution end
              flatten().
              custom_fully_connected(self.s16 * self.s16 * self.gf_dim * 8).
              fc_batch_norm().

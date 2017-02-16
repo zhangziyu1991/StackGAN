@@ -85,11 +85,11 @@ class Dataset(object):
                 if random.random() > 0.5:
                     transformed_images[i] = np.fliplr(cropped_image)
                     if sketches is not None:
-                        transformed_sketches[i] = np.fliplr(cropped_sketches).flatten()
+                        transformed_sketches[i] = np.fliplr(cropped_sketches)#.flatten()
                 else:
                     transformed_images[i] = cropped_image
                     if sketches is not None:
-                        transformed_sketches[i] = cropped_sketches.flatten()
+                        transformed_sketches[i] = cropped_sketches#.flatten()
             return transformed_images, transformed_sketches
 
         return images, sketches
@@ -240,7 +240,7 @@ class TextDataset(object):
             embeddings = pickle.load(f)
             # embeddings = embeddings[0:20]
             embeddings = np.array(embeddings)
-            self.embedding_shape = [self.image_shape[0] * self.image_shape[0]]
+            self.embedding_shape = [self.image_shape[0], self.image_shape[0]]
             print('embeddings: ', embeddings.shape)
 
         with open(pickle_path + '/filenames_flying.pickle', 'rb') as f:
