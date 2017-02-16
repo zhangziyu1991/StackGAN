@@ -416,7 +416,7 @@ class CondGANTrainer(object):
     def save_super_images(self, images, sampled_batch, filenames, save_dir, subset, embeddings):
         super_image = []
         for i in range(self.batch_size):
-            super_image_row = [images[i], 2 * np.tile(np.reshape(embeddings[i, :], (self.dataset.train.imsize, self.dataset.train.imsize, 1)), (1, 1, 3))]
+            super_image_row = [images[i], 2 * np.tile(np.reshape(embeddings[i, :], (self.dataset.image_shape[0], self.dataset.image_shape[1], 1)), (1, 1, 3))]
             for j in range(cfg.TEST.NUM_COPY):
                 super_image_row.append(sampled_batch[j][i])
 
