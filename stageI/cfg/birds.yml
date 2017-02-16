@@ -6,8 +6,8 @@ GPU_ID: -1
 Z_DIM: 100
 
 TRAIN:
-    FLAG: True
-    PRETRAINED_MODEL: ''
+    FLAG: False
+    PRETRAINED_MODEL: 'ckt_logs/birds/stageI_2017_02_16_00_15_38/model-68000'
     BATCH_SIZE: 64
     NUM_COPY: 1
     MAX_EPOCH: 4000
