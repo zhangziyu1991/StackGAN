@@ -322,7 +322,7 @@ class CondGANTrainer(object):
             with tf.device("/gpu:%d" % cfg.GPU_ID):
                 counter = self.build_model(sess)
                 saver = tf.train.Saver(tf.all_variables(),
-                                       keep_checkpoint_every_n_hours=2)
+                                       keep_checkpoint_every_n_hours=1)
 
                 # summary_op = tf.merge_all_summaries()
                 summary_writer = tf.train.SummaryWriter(self.log_dir,
@@ -389,12 +389,11 @@ class CondGANTrainer(object):
                         # save checkpoint
                         counter += 1
                         if counter % self.snapshot_interval == 0:
-                            snapshot_path = "%s/%s_%s.ckpt" % \
+                            snapshot_path = "%s/%s" % \
                                             (self.checkpoint_dir,
-                                             self.exp_name,
-                                             str(counter))
-                            fn = saver.save(sess, snapshot_path)
-                            print("Model saved in file: %s" % fn)
+                                             self.exp_name)
+                            fn = saver.save(sess, snapshot_path, global_step=counter)
+                            print("Model saved in file: %s".format(fn))
 
                     if (epoch+1) % 10 == 0:
                         img_sum = self.epoch_sum_images(sess, cfg.TRAIN.NUM_COPY, epoch+1)
