@@ -7,7 +7,7 @@ import pandas as pd
 BIRD_DIR = 'Data/birds'
 
 def load_filenames(data_dir):
-    filepath = data_dir + '/filenames_flying.pickle'
+    filepath = data_dir + '/filenames_flying_7969.pickle'
     with open(filepath, 'rb') as f:
         filenames = pickle.load(f)
     print('Load filenames from: %s (%d)' % (filepath, len(filenames)))
@@ -62,7 +62,7 @@ def convert_birds_dataset_pickle(inpath, set):
         fn = train_filenames[i]
 
         bbox = filename_bbox[fn]
-        mat = scipy.io.loadmat('sketches_flying/{}.mat'.format(fn))
+        mat = scipy.io.loadmat('sketches/{}.mat'.format(fn))
         sketch = mat['sketch']
         sketch = custom_crop(sketch, bbox)
         sketch = scipy.misc.imresize(sketch, [76, 76], 'bicubic').astype('float32')
@@ -71,18 +71,18 @@ def convert_birds_dataset_pickle(inpath, set):
         sketches.append(sketch)
         ids.append(np.int64(fn[:3]))
 
-    print('Saving to {}'.format('Data/birds/{}/sketches_flying.pickle'.format(set)))
-    pickle.dump(sketches, open('Data/birds/{}/sketches_flying.pickle'.format(set), 'wb'))
-    pickle.dump(ids, open('Data/birds/{}/class_info_flying.pickle'.format(set), 'wb'))
+    print('Saving to {}'.format('Data/birds/{}/sketches_flying_7969.pickle'.format(set)))
+    pickle.dump(sketches, open('Data/birds/{}/sketches_flying_7969.pickle'.format(set), 'wb'))
+    pickle.dump(ids, open('Data/birds/{}/class_info_flying_7969.pickle'.format(set), 'wb'))
 
-def generate_pickle_filenames(text_file):
-    with open(text_file, "r") as f:
-        filenames = f.read().splitlines()
-    for i in range(len(filenames)):
-        filenames[i] = filenames[i][:-4]
-    pickle.dump(filenames, open('Data/birds/train/filenames_flying.pickle', 'w'))
+# def generate_pickle_filenames(text_file):
+#     with open(text_file, "r") as f:
+#         filenames = f.read().splitlines()
+#     for i in range(len(filenames)):
+#         filenames[i] = filenames[i][:-4]
+#     pickle.dump(filenames, open('Data/birds/train/filenames_flying_886.pickle', 'w'))
 
 if __name__ == '__main__':
-    generate_pickle_filenames('filenames_flying_bird.txt')
+    # generate_pickle_filenames('Data/birds/train/filenames_flying_886.txt')
     convert_birds_dataset_pickle(BIRD_DIR, 'train')
     # convert_birds_dataset_pickle(BIRD_DIR, 'test')
