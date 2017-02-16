@@ -71,17 +71,18 @@ class Dataset(object):
 
     def transform(self, images, sketches=None):
         if self._aug_flag:
-            transformed_images = np.zeros([images.shape[0], self._imsize, self._imsize, 3])
+            batch_size = images.shape[0]
+            transformed_images = np.zeros([batch_size, self._imsize, self._imsize, 3])
             transformed_sketches = None
             if sketches is not None:
-                transformed_sketches = np.zeros([sketches.shape[0], self._imsize * self._imsize])
+                transformed_sketches = np.zeros([batch_size] + self.embedding_shape)
             ori_size = images.shape[1]
             for i in range(images.shape[0]):
                 h1 = np.floor((ori_size - self._imsize) * np.random.random())
                 w1 = np.floor((ori_size - self._imsize) * np.random.random())
                 cropped_image = images[i][w1: w1 + self._imsize, h1: h1 + self._imsize, :]
                 if sketches is not None:
-                    cropped_sketches = sketches[i][w1: w1 + self._imsize, h1: h1 + self._imsize]
+                    cropped_sketches = sketches[i][w1: w1 + self._imsize, h1: h1 + self._imsize, :]
                 if random.random() > 0.5:
                     transformed_images[i] = np.fliplr(cropped_image)
                     if sketches is not None:
@@ -240,6 +241,7 @@ class TextDataset(object):
             embeddings = pickle.load(f)
             # embeddings = embeddings[0:20]
             embeddings = np.array(embeddings)
+            embeddings = np.expand_dims(embeddings, axis=3)
             self.embedding_shape = [self.image_shape[0], self.image_shape[0], 1]
             print('embeddings: ', embeddings.shape)
 
