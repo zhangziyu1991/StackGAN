@@ -271,7 +271,7 @@ class CondGANTrainer(object):
         gen_samples, img_summary = sess.run([self.superimages, self.image_summary], feed_dict)
 
         # save images generated for train and test captions
-        print('Saving {}/train_{}.jpg'.format(self.log_dir, epoch))
+        print('Saving {}/train_epoch{}.jpg'.format(self.log_dir, epoch))
         scipy.misc.toimage(255.0 / 2.0 * (gen_samples[0] + 1.0), cmin=0, cmax=255).save(
             '{}/train_epoch{}.jpg'.format(self.log_dir, epoch))
         # scipy.misc.imsave('{}/train_epoch{}.jpg'.format(self.log_dir, epoch), gen_samples[0])
