@@ -271,11 +271,11 @@ class CondGANTrainer(object):
         gen_samples, img_summary = sess.run([self.superimages, self.image_summary], feed_dict)
 
         # save images generated for train and test captions
-        print('Saving %s/train.jpg' % self.log_dir)
+        print('Saving {}/train_{}.jpg'.format(self.log_dir, epoch))
         scipy.misc.toimage(255.0 / 2.0 * (gen_samples[0] + 1.0), cmin=0, cmax=255).save(
             '{}/train_epoch{}.jpg'.format(self.log_dir, epoch))
         # scipy.misc.imsave('{}/train_epoch{}.jpg'.format(self.log_dir, epoch), gen_samples[0])
-        print('Saving %s/test.jpg' % self.log_dir)
+        print('Saving {}/test_epoch{}.jpg'.format(self.log_dir, epoch))
         scipy.misc.toimage(255.0 / 2.0 * (gen_samples[1] + 1.0), cmin=0, cmax=255).save(
             '{}/test_epoch{}.jpg'.format(self.log_dir, epoch))
         # scipy.misc.imsave('{}/test_epoch{}.jpg'.format(self.log_dir, epoch), gen_samples[1])
@@ -340,7 +340,7 @@ class CondGANTrainer(object):
                 discriminator_lr = cfg.TRAIN.DISCRIMINATOR_LR
                 num_embedding = cfg.TRAIN.NUM_EMBEDDING
                 lr_decay_step = cfg.TRAIN.LR_DECAY_EPOCH
-                number_example = self.dataset.train._num_examples
+                number_example = self.dataset.train._num_examples + self.dataset.train2._num_examples
                 updates_per_epoch = int(number_example / self.batch_size)
                 epoch_start = int(counter / updates_per_epoch)
                 for epoch in range(epoch_start, self.max_epoch):
@@ -396,7 +396,7 @@ class CondGANTrainer(object):
                         # save checkpoint
                         counter += 1
                         if counter % self.snapshot_interval == 0:
-                            snapshot_path = "%s/%s".format(self.checkpoint_dir, self.exp_name)
+                            snapshot_path = "{}/{}".format(self.checkpoint_dir, self.exp_name)
                             fn = saver.save(sess, snapshot_path, global_step=counter)
                             print("Model saved in file: {}".format(snapshot_path))
 
