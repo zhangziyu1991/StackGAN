@@ -27,7 +27,7 @@ BIRD_DIR = 'Data/birds'
 
 
 def load_filenames(data_dir):
-    filepath = data_dir + 'filenames_flying_7969.pickle'
+    filepath = data_dir + 'filenames_flying_251.pickle'
     with open(filepath, 'rb') as f:
         filenames = pickle.load(f)
     print('Load filenames from: %s (%d)' % (filepath, len(filenames)))
@@ -77,12 +77,12 @@ def save_data_list(inpath, outpath, filenames, filename_bbox):
 
     print('images', len(hr_images), hr_images[0].shape, lr_images[0].shape)
 
-    outfile = outpath + str(LOAD_SIZE) + 'images_flying_7969.pickle'
+    outfile = outpath + str(LOAD_SIZE) + 'images_flying_251.pickle'
     with open(outfile, 'wb') as f_out:
         pickle.dump(hr_images, f_out)
         print('save to: ', outfile)
 
-    outfile = outpath + str(lr_size) + 'images_flying_7969.pickle'
+    outfile = outpath + str(lr_size) + 'images_flying_251.pickle'
     with open(outfile, 'wb') as f_out:
         pickle.dump(lr_images, f_out)
         print('save to: ', outfile)
@@ -92,7 +92,7 @@ def convert_birds_dataset_pickle(inpath):
     # Load dictionary between image filename to its bbox
     filename_bbox = load_bbox(inpath)
     # ## For Train data
-    train_dir = os.path.join(inpath, 'train/')
+    train_dir = os.path.join(inpath, 'test/')
     train_filenames = load_filenames(train_dir)
     save_data_list(inpath, train_dir, train_filenames, filename_bbox)
 
