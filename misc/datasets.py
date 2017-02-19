@@ -78,21 +78,19 @@ class Dataset(object):
                 transformed_sketches = np.zeros([batch_size, self._imsize, self._imsize, 1])
             ori_size = images.shape[1]
             for i in range(images.shape[0]):
-                # h1 = np.floor((ori_size - self._imsize) * np.random.random())
-                # w1 = np.floor((ori_size - self._imsize) * np.random.random())
-                h1 = np.floor((ori_size - self._imsize) * 0.5)
-                w1 = np.floor((ori_size - self._imsize) * 0.5)
+                h1 = np.floor((ori_size - self._imsize) * np.random.random())
+                w1 = np.floor((ori_size - self._imsize) * np.random.random())
                 cropped_image = images[i][w1: w1 + self._imsize, h1: h1 + self._imsize, :]
                 if sketches is not None:
                     cropped_sketches = sketches[i][w1: w1 + self._imsize, h1: h1 + self._imsize, :]
-                # if random.random() > 0.5:
-                #     transformed_images[i] = np.fliplr(cropped_image)
-                #     if sketches is not None:
-                #         transformed_sketches[i] = np.fliplr(cropped_sketches)#.flatten()
-                # else:
-                transformed_images[i] = cropped_image
-                if sketches is not None:
-                    transformed_sketches[i] = cropped_sketches#.flatten()
+                if random.random() > 0.5:
+                    transformed_images[i] = np.fliplr(cropped_image)
+                    if sketches is not None:
+                        transformed_sketches[i] = np.fliplr(cropped_sketches)#.flatten()
+                else:
+                    transformed_images[i] = cropped_image
+                    if sketches is not None:
+                        transformed_sketches[i] = cropped_sketches#.flatten()
             return transformed_images, transformed_sketches
 
         return images, sketches
