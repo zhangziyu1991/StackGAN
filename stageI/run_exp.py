@@ -51,16 +51,17 @@ if __name__ == "__main__":
 
     dataset = TextDataset(datadir, cfg.EMBEDDING_TYPE, 1)
     filename_test = '{}/test'.format(datadir)
-    dataset.test = dataset.get_data(filename_test, 2682, aug_flag=True)
+    dataset.test = dataset.get_data(filename_test, 251, aug_flag=True)
+    dataset.test2 = dataset.get_data(filename_test, 251, aug_flag=True, '_animated')
     if cfg.TRAIN.FLAG:
         filename_train = '{}/train'.format(datadir)
         dataset.train = dataset.get_data(filename_train, 886, aug_flag=True)
-        dataset.train2 = dataset.get_data(filename_train, 7969, aug_flag=True)
+        dataset.train2 = dataset.get_data(filename_train, 7969, aug_flag=True, animated="_animated")
         ckt_logs_dir = "ckt_logs/{}/{}_{}".format(cfg.DATASET_NAME, cfg.CONFIG_NAME, timestamp)
         mkdir_p(ckt_logs_dir)
     else:
         s_tmp = cfg.TRAIN.PRETRAINED_MODEL
-        ckt_logs_dir = s_tmp[:s_tmp.find('.ckpt')]
+        # ckt_logs_dir = s_tmp[:s_tmp.find('.ckpt')]
 
     model = CondGAN(
         image_shape=dataset.image_shape

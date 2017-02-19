@@ -224,6 +224,7 @@ class TextDataset(object):
         self.train = None
         self.train2 = None
         self.test = None
+        self.test2 = None
         self.workdir = workdir
         # if embedding_type == 'cnn-rnn':
         #     # self.embedding_filename = '/char-CNN-RNN-embeddings.pickle'
@@ -231,14 +232,14 @@ class TextDataset(object):
         # elif embedding_type == 'skip-thought':
         #     self.embedding_filename = '/skip-thought-embeddings.pickle'
 
-    def get_data(self, pickle_path, subset=None, aug_flag=True):
+    def get_data(self, pickle_path, subset=None, aug_flag=True, animated=""):
         with open(pickle_path + '/76images_flying_{}.pickle'.format(subset), 'rb') as f:
             images = pickle.load(f)
             # images = images[0:20]
             images = np.array(images)
             print('images: ', images.shape)
 
-        with open(pickle_path + '/sketches_flying_{}.pickle'.format(subset), 'rb') as f:
+        with open(pickle_path + '/sketches_flying_{}{}.pickle'.format(subset, animated), 'rb') as f:
             embeddings = pickle.load(f)
             # embeddings = embeddings[0:20]
             embeddings = np.array(embeddings)

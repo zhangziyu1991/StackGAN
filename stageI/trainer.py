@@ -428,7 +428,7 @@ class CondGANTrainer(object):
             super_image.append(np.concatenate(super_image_row, axis=1))
         super_image = np.concatenate(super_image, axis=0)
 
-        save_path = '{}-1real-{}samples/{}/{}.jpg'.format(save_dir, cfg.TEST.NUM_COPY, subset, filenames[0])
+        save_path = '{}-1real-{}samples/{}/{}/{}.jpg'.format(save_dir, cfg.TEST.NUM_COPY, subset, 'animated', filenames[0])
         folder = save_path[:save_path.rfind('/')]
         if not os.path.isdir(folder):
             print('Make a new folder: ', folder)
@@ -443,7 +443,13 @@ class CondGANTrainer(object):
         print('num_examples: {}'.format(dataset._num_examples))
         while count < dataset.num_examples:
             start = count % dataset.num_examples
-            images, embeddings, filenames = dataset.next_batch_test(self.batch_size, start)
+            images, embeddings, filenames = dataset.next_batch_test(self.batch_size/2, start)
+            images2, embeddings2, filenames2 = self.dataset.test2.next_batch_test(self.batch_size/2, start)
+
+            images = np.concatenate((images, images2), axis=0)
+            embeddings = np.concatenate((embeddings, embeddings2), axis=0)
+            filenames = np.concatenate((filenames, filenames2), axis=0)
+
             print('count = ', count, 'start = ', start)
 
             sampled_batch = []
@@ -457,7 +463,7 @@ class CondGANTrainer(object):
     def evaluate(self):
         with tf.Session(config=tf.ConfigProto(allow_soft_placement=True)) as sess:
             with tf.device('/gpu:{}'.format(cfg.GPU_ID)):
-                if 1:#self.model_path.find('.ckpt') != -1:
+                if len(self.model_path) > 0:
                     self.init_opt()
                     print("Reading model parameters from {}".format(self.model_path))
                     saver = tf.train.Saver(tf.all_variables())
