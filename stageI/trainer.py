@@ -222,16 +222,16 @@ class CondGANTrainer(object):
 
     def visualization(self, n):
         fake_sum_train, superimage_train = \
-            self.visualize_one_superimage(self.fake_images[: n/2],
-                                          self.images[: n/2],
-                                          n/2,
-                                          "train", self.embeddings[: n/2])
+            self.visualize_one_superimage(self.fake_images[: int(n/2)],
+                                          self.images[: int(n/2)],
+                                          int(n/2),
+                                          "train", self.embeddings[: int(n/2)])
         # self.visualize_one_superimage(self.fake_images[:n * n], self.images[:n * n], n, "train")
         fake_sum_test, superimage_test = \
-            self.visualize_one_superimage(self.fake_images[n/2: n],
-                                          self.images[n/2: n],
-                                          n/2,
-                                          "test", self.embeddings[n/2: n])
+            self.visualize_one_superimage(self.fake_images[int(n/2): int(n)],
+                                          self.images[int(n/2): int(n)],
+                                          int(n/2),
+                                          "test", self.embeddings[int(n/2): int(n)])
         # fake_sum_test, superimage_test = \
         #     self.visualize_one_superimage(self.fake_images[:n * n],
         #                                   self.images[:n * n],
