@@ -458,7 +458,7 @@ class CondGANTrainer(object):
                 sampled_batch.append(sampled)
             self.save_super_images(images, sampled_batch, filenames, save_dir, subset, embeddings)
 
-            count += 1#self.batch_size
+            count += self.batch_size / 2
 
     def evaluate(self):
         with tf.Session(config=tf.ConfigProto(allow_soft_placement=True)) as sess:
