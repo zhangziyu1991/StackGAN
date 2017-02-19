@@ -60,18 +60,13 @@ if __name__ == "__main__":
         ckt_logs_dir = "ckt_logs/{}/{}_{}".format(cfg.DATASET_NAME, cfg.CONFIG_NAME, timestamp)
         mkdir_p(ckt_logs_dir)
     else:
-        s_tmp = cfg.TRAIN.PRETRAINED_MODEL
+        # s_tmp = cfg.TRAIN.PRETRAINED_MODEL
         # ckt_logs_dir = s_tmp[:s_tmp.find('.ckpt')]
+        ckt_logs_dir = cfg.TRAIN.PRETRAINED_MODEL
 
-    model = CondGAN(
-        image_shape=dataset.image_shape
-    )
+    model = CondGAN(image_shape=dataset.image_shape)
 
-    algo = CondGANTrainer(
-        model=model,
-        dataset=dataset,
-        ckt_logs_dir=ckt_logs_dir
-    )
+    algo = CondGANTrainer(model=model, dataset=dataset, ckt_logs_dir=ckt_logs_dir)
     if cfg.TRAIN.FLAG:
         # quit()
         algo.train()
