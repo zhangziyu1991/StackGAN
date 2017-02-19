@@ -89,10 +89,10 @@ class Dataset(object):
                 #     transformed_images[i] = np.fliplr(cropped_image)
                 #     if sketches is not None:
                 #         transformed_sketches[i] = np.fliplr(cropped_sketches)#.flatten()
-                else:
-                    transformed_images[i] = cropped_image
-                    if sketches is not None:
-                        transformed_sketches[i] = cropped_sketches#.flatten()
+                # else:
+                transformed_images[i] = cropped_image
+                if sketches is not None:
+                    transformed_sketches[i] = cropped_sketches#.flatten()
             return transformed_images, transformed_sketches
 
         return images, sketches
