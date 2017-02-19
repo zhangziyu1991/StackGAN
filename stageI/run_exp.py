@@ -50,9 +50,9 @@ if __name__ == "__main__":
         datadir = 'Data/%s' % cfg.DATASET_NAME
 
     dataset = TextDataset(datadir, cfg.EMBEDDING_TYPE, 1)
-    filename_test = '{}/train'.format(datadir)
-    dataset.test = dataset.get_data(filename_test, 886, aug_flag=True)
-    dataset.test2 = dataset.get_data(filename_test, 886, aug_flag=True)
+    filename_test = '{}/test'.format(datadir)
+    dataset.test = dataset.get_data(filename_test, 251, aug_flag=True)
+    dataset.test2 = dataset.get_data(filename_test, 251, aug_flag=True, animated='_animated')
     if cfg.TRAIN.FLAG:
         filename_train = '{}/train'.format(datadir)
         dataset.train = dataset.get_data(filename_train, 886, aug_flag=True)
