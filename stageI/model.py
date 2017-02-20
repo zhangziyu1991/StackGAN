@@ -68,8 +68,10 @@ class CondGAN(object):
              # max_pool(2, 2, edges=pt.PAD_VALID).
              # additional convolution end
              flatten().
-             custom_fully_connected(self.ef_dim * 2)).
+             custom_fully_connected(self.ef_dim * 2).
+             # comment this
              apply(leaky_rectify, leakiness=0.2))
+             # comment this
         mean = conditions[:, :self.ef_dim]
         log_sigma = conditions[:, self.ef_dim:]
         return [mean, log_sigma]
