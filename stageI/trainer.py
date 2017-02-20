@@ -400,7 +400,7 @@ class CondGANTrainer(object):
                             fn = saver.save(sess, snapshot_path, global_step=counter)
                             print("Model saved in file: {}".format(snapshot_path))
 
-                    if (epoch+1) % 50 == 0 or (epoch+1) < 20:
+                    if (epoch+1) % 20 == 0 or (epoch+1) < 20:
                         img_sum = self.epoch_sum_images(sess, cfg.TRAIN.NUM_COPY, epoch+1)
                         summary_writer.add_summary(img_sum, counter)
 
