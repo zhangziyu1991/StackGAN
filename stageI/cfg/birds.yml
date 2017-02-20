@@ -7,7 +7,7 @@ Z_DIM: 100
 
 TRAIN:
     FLAG: False
-    PRETRAINED_MODEL: 'ckt_logs/birds/stageI_2017_02_16_14_41_01/model-164000'
+    PRETRAINED_MODEL: 'ckt_logs/birds/stageI_2017_02_16_00_15_38/model-68000'
     BATCH_SIZE: 2
     NUM_COPY: 2
     MAX_EPOCH: 1200

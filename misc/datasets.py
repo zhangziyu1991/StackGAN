@@ -196,7 +196,7 @@ class Dataset(object):
         sampled_images, sampled_embeddings = self.transform(sampled_images, sampled_embeddings)
 
         # sampled_captions = []
-        # sampled_filenames = self._filenames[start:end]
+        sampled_filenames = self._filenames[start:end]
         # sampled_class_id = self._class_id[start:end]
         # for i in range(len(sampled_filenames)):
         #     captions = self.readCaptions(sampled_filenames[i], sampled_class_id[i])
@@ -207,7 +207,7 @@ class Dataset(object):
         #     batch = sampled_embeddings[:, i, :]
         #     sampled_embeddings_batchs.append(np.squeeze(batch))
 
-        return sampled_images, sampled_embeddings, self._saveIDs[start:end]
+        return sampled_images, sampled_embeddings, sampled_filenames#self._saveIDs[start:end]
 
 
 class TextDataset(object):
