@@ -196,15 +196,15 @@ class CondGANTrainer(object):
         all_sum = {'g': [], 'd': [], 'hist': []}
         for k, v in self.log_vars:
             if k.startswith('g'):
-                all_sum['g'].append(tf.scalar_summary(k, v))
+                all_sum['g'].append(tf.summary.scalar(k, v))
             elif k.startswith('d'):
-                all_sum['d'].append(tf.scalar_summary(k, v))
+                all_sum['d'].append(tf.summary.scalar(k, v))
             elif k.startswith('hist'):
-                all_sum['hist'].append(tf.histogram_summary(k, v))
+                all_sum['hist'].append(tf.summary.histogram(k, v))
 
-        self.g_sum = tf.merge_summary(all_sum['g'])
-        self.d_sum = tf.merge_summary(all_sum['d'])
-        self.hist_sum = tf.merge_summary(all_sum['hist'])
+        self.g_sum = tf.summary.merge(all_sum['g'])
+        self.d_sum = tf.summary.merge(all_sum['d'])
+        self.hist_sum = tf.summary.merge(all_sum['hist'])
 
     def visualize_one_superimage(self, img_var, images, rows, filename, embeddings):
         stacked_img = []
@@ -217,7 +217,7 @@ class CondGANTrainer(object):
             # each row has 1 real image + 1 fake images
             stacked_img.append(tf.concat(1, row_img))
         imgs = tf.expand_dims(tf.concat(0, stacked_img), 0)
-        current_img_summary = tf.image_summary(filename, imgs)
+        current_img_summary = tf.summary.image(filename, imgs)
         return current_img_summary, imgs
 
     def visualization(self, n):
@@ -237,7 +237,7 @@ class CondGANTrainer(object):
         #                                   self.images[:n * n],
         #                                   n, "test")
         self.superimages = tf.concat(0, [superimage_train, superimage_test])
-        self.image_summary = tf.merge_summary([fake_sum_train, fake_sum_test])
+        self.image_summary = tf.summary.merge([fake_sum_train, fake_sum_test])
 
     def preprocess(self, x, n):
         # make sure every row with n column have the same embeddings
@@ -324,9 +324,8 @@ class CondGANTrainer(object):
                 saver = tf.train.Saver(tf.all_variables(),
                                        keep_checkpoint_every_n_hours=1)
 
-                # summary_op = tf.merge_all_summaries()
-                summary_writer = tf.train.SummaryWriter(self.log_dir,
-                                                        sess.graph)
+                # summary_op = tf.summary.merge_all()
+                summary_writer = tf.train.SummaryWriter(self.log_dir, sess.graph)
 
                 keys = ["d_loss", "g_loss"]
                 log_vars = []
@@ -380,8 +379,7 @@ class CondGANTrainer(object):
                                     self.d_sum,
                                     self.hist_sum,
                                     log_vars]
-                        _, d_sum, hist_sum, log_vals = sess.run(feed_out,
-                                                                feed_dict)
+                        _, d_sum, hist_sum, log_vals = sess.run(feed_out, feed_dict)
                         summary_writer.add_summary(d_sum, counter)
                         summary_writer.add_summary(hist_sum, counter)
                         all_log_vals.append(log_vals)
@@ -389,8 +387,7 @@ class CondGANTrainer(object):
                         # train g
                         feed_out = [self.generator_trainer,
                                     self.g_sum]
-                        _, g_sum = sess.run(feed_out,
-                                            feed_dict)
+                        _, g_sum = sess.run(feed_out, feed_dict)
                         summary_writer.add_summary(g_sum, counter)
 
                         # save checkpoint
