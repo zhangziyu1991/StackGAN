@@ -280,16 +280,16 @@ class CondGANTrainer(object):
             '{}/test_epoch{}.jpg'.format(self.log_dir, epoch))
         # scipy.misc.imsave('{}/test_epoch{}.jpg'.format(self.log_dir, epoch), gen_samples[1])
 
-        # pfi_train = open(self.log_dir + "/train.txt", "w")
-        pfi_test = open(self.log_dir + "/test.txt", "w")
-        for row in range(n):
-            # pfi_train.write('\n***row %d***\n' % row)
-            # pfi_train.write(captions_train[row * n])
-
-            pfi_test.write('\n***row %d***\n' % row)
-            pfi_test.write(captions_test[row * n])
-        # pfi_train.close()
-        pfi_test.close()
+        # # pfi_train = open(self.log_dir + "/train.txt", "w")
+        # pfi_test = open(self.log_dir + "/test.txt", "w")
+        # for row in range(n):
+        #     # pfi_train.write('\n***row %d***\n' % row)
+        #     # pfi_train.write(captions_train[row * n])
+        #
+        #     pfi_test.write('\n***row %d***\n' % row)
+        #     pfi_test.write(captions_test[row * n])
+        # # pfi_train.close()
+        # pfi_test.close()
 
         return img_summary
 
