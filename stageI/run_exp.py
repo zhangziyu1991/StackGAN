@@ -19,6 +19,7 @@ from stageI.model import CondGAN
 from stageI.trainer import CondGANTrainer
 from misc.utils import mkdir_p
 from misc.config import cfg, cfg_from_file
+from subprocess import call
 
 
 def parse_args():
@@ -69,6 +70,8 @@ if __name__ == "__main__":
     algo = CondGANTrainer(model=model, dataset=dataset, ckt_logs_dir=ckt_logs_dir)
     if cfg.TRAIN.FLAG:
         # quit()
+        call(['cp', 'stageI/cfg/birds.yml',  ckt_logs_dir])
+        call(['cp', 'stageI/model.py', ckt_logs_dir])
         algo.train()
     else:
         ''' For every input text embedding/sentence in the

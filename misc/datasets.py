@@ -246,13 +246,13 @@ class TextDataset(object):
     def get_data(self, pickle_path, subset=None, aug_flag=True, animated=""):
         with open(pickle_path + '/76images_flying_{}.pickle'.format(subset), 'rb') as f:
             images = pickle.load(f)
-            images = images[0:2]
+            images = images[0:10]
             images = np.array(images)
             print('images: ', images.shape)
 
         with open(pickle_path + '/sketches_flying_{}{}.pickle'.format(subset, animated), 'rb') as f:
             embeddings = pickle.load(f)
-            embeddings = embeddings[0:2]
+            embeddings = embeddings[0:10]
             embeddings = np.array(embeddings)
             embeddings = np.expand_dims(embeddings, axis=3)
             self.embedding_shape = [self.image_shape[0], self.image_shape[0], 1]
@@ -260,12 +260,12 @@ class TextDataset(object):
 
         with open(pickle_path + '/filenames_flying_{}.pickle'.format(subset), 'rb') as f:
             list_filenames = pickle.load(f)
-            list_filenames = list_filenames[0:2]
+            list_filenames = list_filenames[0:10]
             print('list_filenames: ', len(list_filenames), list_filenames[0])
 
         with open(pickle_path + '/class_info_flying_{}.pickle'.format(subset), 'rb') as f:
             class_id = pickle.load(f)
-            class_id = class_id[0:2]
+            class_id = class_id[0:10]
             # class_id = None
 
         return Dataset(images, self.image_shape[0], embeddings,
