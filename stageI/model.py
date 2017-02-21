@@ -327,13 +327,13 @@ class CondGAN(object):
                     conv_batch_norm().
                     apply(leaky_rectify, leakiness=0.2).
                     # 4 x 4
-                    custom_conv2d(8 * self.df_dim, k_h=4, k_w=4, d_h=1, d_w=1, padding='VALID').
+                    custom_conv2d(8 * self.df_dim, k_h=4, k_w=4, d_h=2, d_w=2).
                     conv_batch_norm().
                     apply(leaky_rectify, leakiness=0.2).
                     # 2 x 2
-                    # custom_conv2d(8 * self.df_dim, k_h=4, k_w=4, d_h=2, d_w=2).
-                    # conv_batch_norm().
-                    # apply(leaky_rectify, leakiness=0.2).
+                    custom_conv2d(8 * self.df_dim, k_h=4, k_w=4, d_h=2, d_w=2).
+                    conv_batch_norm().
+                    apply(leaky_rectify, leakiness=0.2).
                     # 1 x 1
                     custom_conv2d(1, k_h=1, k_w=1, d_h=1, d_w=1))
         return template
