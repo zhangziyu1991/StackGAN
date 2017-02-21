@@ -420,7 +420,7 @@ class CondGANTrainer(object):
                                      self.discriminator_lr: discriminator_lr}
                         _, g_sum = sess.run(feed_out, feed_dict)
 
-                        kkk = sess.run([self.real_logit], feed_dict)
+                        kkk = sess.run(self.real_logit, feed_dict)
                         print('kkk: {}'.format(kkk))
 
                         summary_writer.add_summary(g_sum, counter)
