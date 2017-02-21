@@ -408,15 +408,17 @@ class CondGANTrainer(object):
                         feed_out = [self.generator_trainer,
                                     self.g_sum]
                         _, g_sum = sess.run(feed_out, feed_dict)
-
-                        images, wrong_images, embeddings, _, _ = \
-                            self.dataset.train.next_batch(self.batch_size, num_embedding)
-                        feed_dict = {self.images: images,
-                                     self.wrong_images: wrong_images,
-                                     self.embeddings: embeddings,
-                                     self.generator_lr: generator_lr,
-                                     self.discriminator_lr: discriminator_lr}
                         _, g_sum = sess.run(feed_out, feed_dict)
+                        _, g_sum = sess.run(feed_out, feed_dict)
+
+                        # images, wrong_images, embeddings, _, _ = \
+                        #     self.dataset.train.next_batch(self.batch_size, num_embedding)
+                        # feed_dict = {self.images: images,
+                        #              self.wrong_images: wrong_images,
+                        #              self.embeddings: embeddings,
+                        #              self.generator_lr: generator_lr,
+                        #              self.discriminator_lr: discriminator_lr}
+                        # _, g_sum = sess.run(feed_out, feed_dict)
 
                         summary_writer.add_summary(g_sum, counter)
 
