@@ -173,11 +173,11 @@ class CondGAN(object):
         # 2 * 2
         node_8 = node_7.apply(tf.nn.relu).custom_deconv2d([0, 4, 4, 4 * self.gf_dim], k_h=4, k_w=4, d_h=2, d_w=2).conv_batch_norm().dropout(0.5).concat(3, [node_4])
         # 4 * 4
-        node_9 = node_8.apply(tf.nn.relu).custom_deconv2d([0, 8, 8, 4 * self.gf_dim], k_h=4, k_w=4, d_h=2, d_w=2).conv_batch_norm().dropout(0.5).concat(3, [node_3])
+        node_9 = node_8.apply(tf.nn.relu).custom_deconv2d([0, 8, 8, 4 * self.gf_dim], k_h=4, k_w=4, d_h=2, d_w=2).conv_batch_norm().concat(3, [node_3])
         # 8 * 8
-        node_10 = node_9.apply(tf.nn.relu).custom_deconv2d([0, 16, 16, 2 * self.gf_dim], k_h=4, k_w=4, d_h=2, d_w=2).conv_batch_norm().dropout(0.5).concat(3, [node_2])
+        node_10 = node_9.apply(tf.nn.relu).custom_deconv2d([0, 16, 16, 2 * self.gf_dim], k_h=4, k_w=4, d_h=2, d_w=2).conv_batch_norm().concat(3, [node_2])
         # 16 * 16
-        node_11 = node_10.apply(tf.nn.relu).custom_deconv2d([0, 32, 32, self.gf_dim], k_h=4, k_w=4, d_h=2, d_w=2).conv_batch_norm().dropout(0.5).concat(3, [node_1])
+        node_11 = node_10.apply(tf.nn.relu).custom_deconv2d([0, 32, 32, self.gf_dim], k_h=4, k_w=4, d_h=2, d_w=2).conv_batch_norm().concat(3, [node_1])
         # 32 * 32
         node_12 = node_11.apply(tf.nn.relu).custom_deconv2d([0, 64, 64, 3], k_h=4, k_w=4, d_h=2, d_w=2).conv_batch_norm().apply(tf.nn.tanh)
         # 64 * 64
