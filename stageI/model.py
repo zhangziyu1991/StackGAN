@@ -47,30 +47,30 @@ class CondGAN(object):
         conditions =\
             (pt.wrap(c_var).
              # additional convolutions begin
-             # custom_conv2d(self.ef_dim / 2, k_h=3, k_w=3, d_h=1, d_w=1).
-             # conv_batch_norm().
-             # apply(tf.nn.relu).
-             #
-             # custom_conv2d(self.ef_dim / 2, k_h=3, k_w=3, d_h=1, d_w=1).
-             # conv_batch_norm().
-             # apply(tf.nn.relu).
-             #
-             # max_pool(2, 2, edges=pt.PAD_VALID).
-             #
-             # custom_conv2d(self.ef_dim, k_h=3, k_w=3, d_h=1, d_w=1).
-             # conv_batch_norm().
-             # apply(tf.nn.relu).
-             #
-             # custom_conv2d(self.ef_dim, k_h=3, k_w=3, d_h=1, d_w=1).
-             # conv_batch_norm().
-             # apply(tf.nn.relu).
-             #
-             # max_pool(2, 2, edges=pt.PAD_VALID).
+             custom_conv2d(self.ef_dim / 2, k_h=3, k_w=3, d_h=1, d_w=1).
+             conv_batch_norm().
+             apply(tf.nn.relu).
+
+             custom_conv2d(self.ef_dim / 2, k_h=3, k_w=3, d_h=1, d_w=1).
+             conv_batch_norm().
+             apply(tf.nn.relu).
+
+             max_pool(2, 2, edges=pt.PAD_VALID).
+
+             custom_conv2d(self.ef_dim, k_h=3, k_w=3, d_h=1, d_w=1).
+             conv_batch_norm().
+             apply(tf.nn.relu).
+
+             custom_conv2d(self.ef_dim, k_h=3, k_w=3, d_h=1, d_w=1).
+             conv_batch_norm().
+             apply(tf.nn.relu).
+
+             max_pool(2, 2, edges=pt.PAD_VALID).
              # additional convolution end
              flatten().
-             custom_fully_connected(self.ef_dim * 2).
+             custom_fully_connected(self.ef_dim * 2))
              # comment this
-             apply(leaky_rectify, leakiness=0.2))
+             # apply(leaky_rectify, leakiness=0.2))
              # comment this
         mean = conditions[:, :self.ef_dim]
         log_sigma = conditions[:, self.ef_dim:]

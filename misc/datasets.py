@@ -78,17 +78,17 @@ class Dataset(object):
                 transformed_sketches = np.zeros([batch_size, self._imsize, self._imsize, 1])
             ori_size = images.shape[1]
             for i in range(images.shape[0]):
-                # h1 = np.floor((ori_size - self._imsize) * np.random.random())
-                # w1 = np.floor((ori_size - self._imsize) * np.random.random())
-                h1 = np.floor((ori_size - self._imsize) * 0.5)
-                w1 = np.floor((ori_size - self._imsize) * 0.5)
+                h1 = np.floor((ori_size - self._imsize) * np.random.random())
+                w1 = np.floor((ori_size - self._imsize) * np.random.random())
+                # h1 = np.floor((ori_size - self._imsize) * 0.5)
+                # w1 = np.floor((ori_size - self._imsize) * 0.5)
                 cropped_image = images[i][w1: w1 + self._imsize, h1: h1 + self._imsize, :]
 
-                if jitter:
-                    for j in range(3):
-                        if random.random() > 0.5:
-                            cropped_image[:, :, j] *= (0.75 + 0.5 * random.random())
-                    cropped_image = np.minimum(255.0, cropped_image)
+                # if jitter:
+                #     for j in range(3):
+                #         if random.random() > 0.5:
+                #             cropped_image[:, :, j] *= (0.75 + 0.5 * random.random())
+                #     cropped_image = np.minimum(255.0, cropped_image)
 
                 if sketches is not None:
                     cropped_sketches = sketches[i][w1: w1 + self._imsize, h1: h1 + self._imsize, :]

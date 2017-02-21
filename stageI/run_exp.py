@@ -52,11 +52,11 @@ if __name__ == "__main__":
     dataset = TextDataset(datadir, cfg.EMBEDDING_TYPE, 1)
     filename_test = '{}/test'.format(datadir)
     dataset.test = dataset.get_data(filename_test, 251, aug_flag=True)
-    dataset.test2 = dataset.get_data(filename_test, 251, aug_flag=True, animated='_animated')
+    # dataset.test2 = dataset.get_data(filename_test, 251, aug_flag=True, animated='_animated')
     if cfg.TRAIN.FLAG:
         filename_train = '{}/train'.format(datadir)
         dataset.train = dataset.get_data(filename_train, 886, aug_flag=True)
-        dataset.train2 = dataset.get_data(filename_train, 7969, aug_flag=True)
+        # dataset.train2 = dataset.get_data(filename_train, 7969, aug_flag=True)
         ckt_logs_dir = "ckt_logs/{}/{}_{}".format(cfg.DATASET_NAME, cfg.CONFIG_NAME, timestamp)
         mkdir_p(ckt_logs_dir)
     else:

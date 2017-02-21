@@ -3,13 +3,13 @@ CONFIG_NAME: 'stageI'
 DATASET_NAME: 'birds'
 EMBEDDING_TYPE: 'cnn-rnn'
 GPU_ID: -1
-Z_DIM: 100
+Z_DIM: 10
 
 TRAIN:
-    FLAG: False
-    PRETRAINED_MODEL: 'ckt_logs/birds/stageI_2017_02_15_13_16_35/model_68000.ckpt'
-    BATCH_SIZE: 2
-    NUM_COPY: 2
+    FLAG: True
+    PRETRAINED_MODEL: ''
+    BATCH_SIZE: 64
+    NUM_COPY: 20
     MAX_EPOCH: 600
     SNAPSHOT_INTERVAL: 2000
     DISCRIMINATOR_LR: 0.0002
@@ -19,11 +19,12 @@ TRAIN:
     COEFF:
       KL: 2.0
     COND_AUGMENTATION: False
+    B_WRONG: False
 
 TEST:
     NUM_COPY: 10
 
 GAN:
-    EMBEDDING_DIM: 128
-    DF_DIM: 64
-    GF_DIM: 128
+    EMBEDDING_DIM: 16
+    DF_DIM: 8
+    GF_DIM: 16

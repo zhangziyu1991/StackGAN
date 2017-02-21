@@ -359,14 +359,14 @@ class CondGANTrainer(object):
 
                         # training d
                         images, wrong_images, embeddings, _, _ = \
-                            self.dataset.train.next_batch(self.batch_size / 2, num_embedding)
+                            self.dataset.train.next_batch(self.batch_size, num_embedding)
 
-                        images2, wrong_images2, embeddings2, _, _ = \
-                            self.dataset.train2.next_batch(self.batch_size / 2, num_embedding)
-
-                        images = np.concatenate((images, images2), axis=0)
-                        wrong_images = np.concatenate((wrong_images, wrong_images2), axis=0)
-                        embeddings = np.concatenate((embeddings, embeddings2), axis=0)
+                        # images2, wrong_images2, embeddings2, _, _ = \
+                        #     self.dataset.train2.next_batch(self.batch_size / 2, num_embedding)
+                        #
+                        # images = np.concatenate((images, images2), axis=0)
+                        # wrong_images = np.concatenate((wrong_images, wrong_images2), axis=0)
+                        # embeddings = np.concatenate((embeddings, embeddings2), axis=0)
 
                         feed_dict = {self.images: images,
                                      self.wrong_images: wrong_images,
