@@ -322,7 +322,7 @@ class CondGANTrainer(object):
             with tf.device("/gpu:%d" % cfg.GPU_ID):
                 counter = self.build_model(sess)
                 saver = tf.train.Saver(tf.all_variables(),
-                                       keep_checkpoint_every_n_hours=1)
+                                       keep_checkpoint_every_n_hours=0.1)
 
                 # summary_op = tf.summary.merge_all()
                 summary_writer = tf.train.SummaryWriter(self.log_dir, sess.graph)
