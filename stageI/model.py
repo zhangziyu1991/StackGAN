@@ -335,7 +335,9 @@ class CondGAN(object):
                     conv_batch_norm().
                     apply(leaky_rectify, leakiness=0.2).
                     # 1 x 1
-                    custom_conv2d(1, k_h=1, k_w=1, d_h=1, d_w=1))
+                    custom_fully_connected(1))
+                    # custom_conv2d(1, k_h=1, k_w=1, d_h=1, d_w=1))
+
         return template
 
     def get_discriminator(self, x_var, c_var):
