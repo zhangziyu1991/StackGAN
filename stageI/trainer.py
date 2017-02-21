@@ -100,7 +100,7 @@ class CondGANTrainer(object):
             with tf.variable_scope("g_net"):
                 # ####get output from G network################################
                 c, kl_loss = self.sample_encoded_context(self.embeddings)
-                # z = tf.random_normal([self.batch_size, cfg.Z_DIM])
+                z = tf.random_normal([self.batch_size, cfg.Z_DIM])
                 self.log_vars.append(("hist_c", c))
                 self.log_vars.append(("hist_z", z))
                 # fake_images = self.model.get_generator(tf.concat(1, [c, z]))
