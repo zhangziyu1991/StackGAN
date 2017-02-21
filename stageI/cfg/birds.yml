@@ -18,7 +18,7 @@ TRAIN:
     NUM_EMBEDDING: 1
     COEFF:
       KL: 2.0
-    COND_AUGMENTATION: False
+    COND_AUGMENTATION: True
     B_WRONG: False
 
 TEST:

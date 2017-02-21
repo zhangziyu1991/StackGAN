@@ -339,7 +339,7 @@ class CondGANTrainer(object):
                 discriminator_lr = cfg.TRAIN.DISCRIMINATOR_LR
                 num_embedding = cfg.TRAIN.NUM_EMBEDDING
                 lr_decay_step = cfg.TRAIN.LR_DECAY_EPOCH
-                number_example = self.dataset.train._num_examples + self.dataset.train2._num_examples
+                number_example = self.dataset.train._num_examples #+ self.dataset.train2._num_examples
                 updates_per_epoch = int(number_example / self.batch_size)
                 epoch_start = int(counter / updates_per_epoch)
                 for epoch in range(epoch_start, self.max_epoch):
