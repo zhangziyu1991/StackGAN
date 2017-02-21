@@ -324,6 +324,20 @@ class CondGANTrainer(object):
                 saver = tf.train.Saver(tf.all_variables(),
                                        keep_checkpoint_every_n_hours=0.1)
 
+                total_parameters = 0
+                for variable in tf.trainable_variables():
+                    # shape is an array of tf.Dimension
+                    shape = variable.get_shape()
+                    print(shape)
+                    print(len(shape))
+                    variable_parametes = 1
+                    for dim in shape:
+                        print(dim)
+                        variable_parametes *= dim.value
+                    print(variable_parametes)
+                    total_parameters += variable_parametes
+                print("Total number of variables: {}".format(total_parameters))
+
                 # summary_op = tf.summary.merge_all()
                 summary_writer = tf.train.SummaryWriter(self.log_dir, sess.graph)
 
