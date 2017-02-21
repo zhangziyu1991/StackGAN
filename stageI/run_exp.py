@@ -19,6 +19,7 @@ from stageI.model import CondGAN
 from stageI.trainer import CondGANTrainer
 from misc.utils import mkdir_p
 from misc.config import cfg, cfg_from_file
+from subprocess import call
 
 
 def parse_args():
