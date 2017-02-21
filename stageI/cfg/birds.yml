@@ -19,7 +19,7 @@ TRAIN:
     COEFF:
       KL: 2.0
     COND_AUGMENTATION: True
-    B_WRONG: True
+    B_WRONG: False
 
 TEST:
     NUM_COPY: 10

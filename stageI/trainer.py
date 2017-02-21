@@ -408,6 +408,7 @@ class CondGANTrainer(object):
                         feed_out = [self.generator_trainer,
                                     self.g_sum]
                         _, g_sum = sess.run(feed_out, feed_dict)
+                        _, g_sum = sess.run(feed_out, feed_dict)
                         summary_writer.add_summary(g_sum, counter)
 
                         # save checkpoint
