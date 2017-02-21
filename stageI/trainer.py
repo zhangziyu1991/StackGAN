@@ -254,12 +254,12 @@ class CondGANTrainer(object):
 
     def epoch_sum_images(self, sess, n, epoch):
         images_train, _, embeddings_train, captions_train, _ = \
-            self.dataset.train.next_batch(10, cfg.TRAIN.NUM_EMBEDDING)
+            self.dataset.train.next_batch(int(n/2), cfg.TRAIN.NUM_EMBEDDING)
         # images_train = self.preprocess(images_train, n)
         # embeddings_train = self.preprocess(embeddings_train, n)
 
         images_test, _, embeddings_test, captions_test, _ = \
-            self.dataset.test.next_batch(10, 1)
+            self.dataset.test.next_batch(int(n/2), 1)
         # images_test = self.preprocess(images_test, n)
         # embeddings_test = self.preprocess(embeddings_test, n)
 
@@ -268,10 +268,10 @@ class CondGANTrainer(object):
 
         # 2 * n * n images, half train, half test
         # in case of batch size > 2 * n *n, pad extra test images
-        # if self.batch_size > 2 * n * n:
-        images_pad, _, embeddings_pad, _, _ = self.dataset.test.next_batch(self.batch_size - 20, 1)
-        images = np.concatenate([images, images_pad], axis=0)
-        embeddings = np.concatenate([embeddings, embeddings_pad], axis=0)
+        if self.batch_size > n:
+            images_pad, _, embeddings_pad, _, _ = self.dataset.test.next_batch(self.batch_size - 20, 1)
+            images = np.concatenate([images, images_pad], axis=0)
+            embeddings = np.concatenate([embeddings, embeddings_pad], axis=0)
 
         feed_dict = {self.images: images, self.embeddings: embeddings}
         gen_samples, img_summary = sess.run([self.superimages, self.image_summary], feed_dict)
