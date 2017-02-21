@@ -73,21 +73,25 @@ class CondGANTrainer(object):
         )
 
     # Given image embedding, get condition vector
+    # def sample_encoded_context(self, embeddings):
+    #     '''Helper function for init_opt'''
+    #     c_mean_logsigma = self.model.generate_condition(embeddings)
+    #     mean = c_mean_logsigma[0]
+    #     if cfg.TRAIN.COND_AUGMENTATION:
+    #         print('Using conditional augmentation.')
+    #         epsilon = tf.truncated_normal(tf.shape(mean))
+    #         stddev = tf.exp(c_mean_logsigma[1])
+    #         c = mean + stddev * epsilon
+    #         kl_loss = KL_loss(c_mean_logsigma[0], c_mean_logsigma[1])
+    #     else:
+    #         print('Not using conditional augmentation.')
+    #         c = mean
+    #         kl_loss = 0
+    #     return c, cfg.TRAIN.COEFF.KL * kl_loss
+
     def sample_encoded_context(self, embeddings):
-        '''Helper function for init_opt'''
-        c_mean_logsigma = self.model.generate_condition(embeddings)
-        mean = c_mean_logsigma[0]
-        if cfg.TRAIN.COND_AUGMENTATION:
-            print('Using conditional augmentation.')
-            epsilon = tf.truncated_normal(tf.shape(mean))
-            stddev = tf.exp(c_mean_logsigma[1])
-            c = mean + stddev * epsilon
-            kl_loss = KL_loss(c_mean_logsigma[0], c_mean_logsigma[1])
-        else:
-            print('Not using conditional augmentation.')
-            c = mean
-            kl_loss = 0
-        return c, cfg.TRAIN.COEFF.KL * kl_loss
+        c = self.model.generate_condition(embeddings)
+        return c, 0
 
     def init_opt(self):
         self.build_placeholder()
@@ -96,10 +100,11 @@ class CondGANTrainer(object):
             with tf.variable_scope("g_net"):
                 # ####get output from G network################################
                 c, kl_loss = self.sample_encoded_context(self.embeddings)
-                z = tf.random_normal([self.batch_size, cfg.Z_DIM])
+                # z = tf.random_normal([self.batch_size, cfg.Z_DIM])
                 self.log_vars.append(("hist_c", c))
                 self.log_vars.append(("hist_z", z))
-                fake_images = self.model.get_generator(tf.concat(1, [c, z]))
+                # fake_images = self.model.get_generator(tf.concat(1, [c, z]))
+                fake_images = self.model.get_generator(tf.concat(1, c))
 
             # ####get discriminator_loss and generator_loss ###################
             discriminator_loss, generator_loss = \
@@ -134,7 +139,8 @@ class CondGANTrainer(object):
             z = tf.tile(z, [self.batch_size, 1])
             # print("Using different z's for different samples.")
             # z = tf.random_normal([self.batch_size, cfg.Z_DIM])
-        self.fake_images = self.model.get_generator(tf.concat(1, [c, z]))
+        # self.fake_images = self.model.get_generator(tf.concat(1, [c, z]))
+        self.fake_images = self.model.get_generator(c)
 
     def compute_losses(self, images, wrong_images, fake_images, embeddings):
         real_logit = self.model.get_discriminator(images, embeddings)
