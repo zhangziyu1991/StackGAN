@@ -103,8 +103,7 @@ class custom_deconv2d(pt.VarStoreMethod):
 
             # Support for versions of TensorFlow before 0.7.0
             except AttributeError:
-                deconv = tf.nn.deconv2d(input_layer, w, output_shape=ts_output_shape,
-                                        strides=[1, d_h, d_w, 1])
+                deconv = tf.nn.deconv2d(input_layer, w, output_shape=ts_output_shape, strides=[1, d_h, d_w, 1])
 
             biases = self.variable('biases', [output_shape[-1]], init=tf.constant_initializer(0.0))
             deconv = tf.reshape(tf.nn.bias_add(deconv, biases), [-1] + output_shape[1:])
