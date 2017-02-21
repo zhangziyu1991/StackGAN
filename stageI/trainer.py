@@ -147,6 +147,8 @@ class CondGANTrainer(object):
         wrong_logit = self.model.get_discriminator(wrong_images, embeddings)
         fake_logit = self.model.get_discriminator(fake_images, embeddings)
 
+        self.real_logit = real_logit
+
         real_d_loss = \
             tf.nn.sigmoid_cross_entropy_with_logits(real_logit,
                                                     tf.ones_like(real_logit))
@@ -171,7 +173,7 @@ class CondGANTrainer(object):
         generator_loss = tf.nn.sigmoid_cross_entropy_with_logits(fake_logit, tf.ones_like(fake_logit))
         generator_loss = tf.reduce_mean(generator_loss)
 
-        return discriminator_loss, generator_loss
+        return discriminator_loss, generator_loss, real_logit
 
     def prepare_trainer(self, generator_loss, discriminator_loss):
         '''Helper function for init_opt'''
@@ -417,6 +419,9 @@ class CondGANTrainer(object):
                                      self.generator_lr: generator_lr,
                                      self.discriminator_lr: discriminator_lr}
                         _, g_sum = sess.run(feed_out, feed_dict)
+
+                        kkk = sess.run([self.real_logit], feed_dict)
+                        print('kkk: {}'.format(kkk))
 
                         summary_writer.add_summary(g_sum, counter)
 
