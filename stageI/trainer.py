@@ -104,7 +104,7 @@ class CondGANTrainer(object):
                 self.log_vars.append(("hist_c", c))
                 self.log_vars.append(("hist_z", z))
                 # fake_images = self.model.get_generator(tf.concat(1, [c, z]))
-                fake_images = self.model.get_generator(tf.concat(1, c))
+                fake_images = self.model.get_generator(c)
 
             # ####get discriminator_loss and generator_loss ###################
             discriminator_loss, generator_loss = \
