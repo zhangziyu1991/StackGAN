@@ -69,6 +69,7 @@ class CondGAN(object):
              # additional convolution end
              flatten().
              custom_fully_connected(self.ef_dim * 8).
+             apply(leaky_rectify, leakiness=0.2).
              custom_fully_connected(self.ef_dim * 2).
              # comment this
              apply(leaky_rectify, leakiness=0.2))
@@ -209,6 +210,8 @@ class CondGAN(object):
                     apply(tf.nn.relu).
 
                     max_pool(2, 2, edges=pt.PAD_VALID).
+                    custom_fully_connected(self.ef_dim * 8).
+                    apply(leaky_rectify, leakiness=0.2).
                     # additional convolution end
                     custom_fully_connected(self.ef_dim).
                     apply(leaky_rectify, leakiness=0.2))
