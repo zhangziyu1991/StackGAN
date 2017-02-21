@@ -173,7 +173,7 @@ class CondGANTrainer(object):
         generator_loss = tf.nn.sigmoid_cross_entropy_with_logits(fake_logit, tf.ones_like(fake_logit))
         generator_loss = tf.reduce_mean(generator_loss)
 
-        return discriminator_loss, generator_loss, real_logit
+        return discriminator_loss, generator_loss
 
     def prepare_trainer(self, generator_loss, discriminator_loss):
         '''Helper function for init_opt'''
