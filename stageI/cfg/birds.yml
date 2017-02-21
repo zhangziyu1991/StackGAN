@@ -26,5 +26,5 @@ TEST:
 
 GAN:
     EMBEDDING_DIM: 32
-    DF_DIM: 128
+    DF_DIM: 64
     GF_DIM: 128
